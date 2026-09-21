@@ -258,40 +258,33 @@ footer{padding:clamp(32px,5vw,56px) clamp(20px,5vw,72px) 28px;border-top:1px sol
     </div>
   </div>
 
-  <!-- SECTION 3: STORY -->
+  <!-- SECTION 3: STORY — text only, strong gradient, let the video breathe -->
   <div class="section-wrap" id="sw3">
     <div class="scroll-section">
-      <div class="sect-overlay sect-overlay-story"></div>
-      <div class="sect-content story-layout">
-        <div class="story-text-col">
+      <div class="sect-overlay" style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,6,4,.3) 0%,rgba(8,6,4,.05) 20%,rgba(8,6,4,.85) 65%,rgba(8,6,4,.98) 100%)"></div>
+      <div class="sect-content bottom" style="padding-bottom:clamp(48px,8vh,80px);padding-left:clamp(24px,8vw,120px)">
+        <div style="max-width:560px">
           <div class="sect-tag sect-text">Our Story</div>
           <h2 class="sect-h2 sect-text d1">By brothers.<br><em>For Austin.</em></h2>
-          <blockquote class="pullquote sect-text d2">"We knew our cookies were better than anything else in Austin. So we started a company."</blockquote>
-          <p style="font-size:clamp(.88rem,1.2vw,.98rem);color:rgba(255,255,255,.7);line-height:1.8;max-width:460px;text-shadow:0 1px 6px rgba(0,0,0,.4)" class="sect-text d3">Kurtis — Tesla engineer, serial baker. Eric — his twin. They wanted to build something together. Their chocolate chip cookie destroyed every chain in Austin, so they started selling at farmer's markets and never looked back.</p>
-          <img src="https://kurtyscookies.com/cdn/shop/files/sig_1.png?v=1705972804" alt="Kurtis signature" class="story-sig sect-text d4" loading="lazy">
-        </div>
-        <div class="story-img-col sect-text d2">
-          <div class="story-photo">
-            <img src="https://kurtyscookies.com/cdn/shop/files/kurt_n_eric.png?v=1784701969" alt="Kurtis and Eric, founders" loading="lazy">
-          </div>
+          <blockquote class="pullquote sect-text d2">"We knew our cookies were better than anything else in Austin — especially the big chains. So we started a company."</blockquote>
+          <p style="font-size:clamp(.88rem,1.2vw,.98rem);color:rgba(255,255,255,.65);line-height:1.8;text-shadow:0 1px 6px rgba(0,0,0,.5);margin-bottom:20px" class="sect-text d3">Kurtis — Tesla engineer, serial baker. Eric — his twin. They started at Austin farmer's markets and never looked back. No preservatives. No shortcuts. 35+ flavors and counting.</p>
+          <img src="https://kurtyscookies.com/cdn/shop/files/sig_1.png?v=1705972804" alt="Kurtis signature" style="height:38px;width:auto;opacity:.75;filter:brightness(10)" class="sect-text d4" loading="lazy">
         </div>
       </div>
     </div>
   </div>
 
-  <!-- SECTION 4: THIS WEEK -->
+  <!-- SECTION 4: TRANSITION — no imagery competing with the video, just the CTA moment -->
   <div class="section-wrap" id="sw4">
     <div class="scroll-section">
-      <div class="sect-overlay sect-overlay-lineup"></div>
+      <div class="sect-overlay" style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,6,4,.15) 0%,rgba(8,6,4,.5) 45%,rgba(8,6,4,.97) 100%)"></div>
       <div class="sect-content center">
-        <div class="sect-tag sect-text">Right Now</div>
-        <h2 class="sect-h2 sect-text d1">This Week's<br><em>Lineup.</em></h2>
-        <div class="lineup-mini" id="lineup-mini">
-          <!-- rendered by JS -->
-        </div>
-        <div class="sect-ctas center-ctas sect-text d3" style="margin-top:24px">
-          <a href="https://kurtyscookies.com" target="_blank" rel="noopener" class="btn-hero">Order Now →</a>
-          <a href="vault.html" class="btn-ghost-white">See All 35+ Flavors →</a>
+        <div class="sect-tag sect-text" style="letter-spacing:.2em">Available Every Saturday · Austin, TX</div>
+        <h2 class="sect-h2 sect-text d1" style="font-size:clamp(2.6rem,6vw,6.5rem)">Order fresh.<br><em>Vote monthly.</em></h2>
+        <p class="sect-sub sect-text d2">Three farmer's markets every Saturday — or get Friday delivery.<br>Vote in The Vault to bring back your favorite vaulted flavors.</p>
+        <div class="sect-ctas center-ctas sect-text d3" style="margin-top:32px">
+          <a href="#order" class="btn-hero">Order Now →</a>
+          <a href="vault.html" class="btn-ghost-white">Enter The Vault 🔥</a>
         </div>
       </div>
     </div>
@@ -416,11 +409,6 @@ async function init(){
   const{data}=await sb.from('cookies').select('id,name,image_url,status,availability,vote_count,hof_rank,categories').order('vote_count',{ascending:false})
   if(!data)return
   // Active lineup (section 4)
-  const active=data.filter(c=>c.status==='active')
-  const miniGrid=document.getElementById('lineup-mini')
-  if(miniGrid){
-    miniGrid.innerHTML=active.slice(0,4).map((c,i)=>`<div class="lineup-card sect-text d${Math.min(i+2,4)}" style="transition-delay:${.2+i*.08}s"><img class="lineup-mini-img" src="${c.image_url}" alt="${c.name}" loading="lazy"><div class="lineup-mini-name">${c.name}</div><div class="lineup-mini-avail">${c.availability||'Active'}</div></div>`).join('')
-  }
   // Vault teaser (top 3)
   const vault=data.filter(c=>c.status==='vault'||c.status==='ineligible').slice(0,3)
   const vtCards=document.getElementById('vt-cards')
