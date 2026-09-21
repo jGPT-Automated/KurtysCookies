@@ -4,888 +4,443 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Kurty's Cookies — The Best Damn Cookies in Austin, TX</title>
-<meta name="description" content="Handcrafted cookies by Kurtis & Eric. Real butter. Real eggs. Organic flour. Zero shortcuts. Saturdays at Austin farmer's markets — vote to bring back your favorites.">
-<meta property="og:title" content="Kurty's Cookies — Austin, TX">
-<meta property="og:description" content="The best damn cookies in Austin. Vote to bring back vault flavors. Order online.">
-<meta property="og:image" content="https://kurtyscookies.com/cdn/shop/files/social_sharing_img_shopify.png?v=1736801322">
+<meta name="description" content="Handcrafted cookies by Kurtis & Eric. Real butter. Real eggs. Organic flour. Zero shortcuts. Austin's best. Order pickup or delivery.">
 <link rel="icon" href="https://kurtyscookies.com/cdn/shop/files/Small_Logo_Red_32x32.png?v=1735852532">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
-/* ===== RESET & ROOT ===== */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;font-size:16px}
+html{scroll-behavior:smooth}
 :root{
-  --bg:#080604;
-  --surface:#110f0c;
-  --surface-2:#1c1915;
-  --border:#2e2923;
-  --border-light:#3d372f;
-  --red:#E63221;
-  --red-dim:rgba(230,50,33,0.12);
-  --red-glow:rgba(230,50,33,0.3);
+  --bg:#080604;--surface:#111009;--surface-2:#1c1915;--border:#2e2923;
+  --red:#E63221;--red-glow:rgba(230,50,33,.3);--red-dim:rgba(230,50,33,.12);
   --gold:#F5A623;
-  --gold-dim:rgba(245,166,35,0.12);
-  --gold-glow:rgba(245,166,35,0.3);
-  --text:#F0EAE4;
-  --muted:#8A7D75;
-  --dim:#4d4540;
-  --ease-expo:cubic-bezier(0.16,1,0.3,1);
-  --ease-spring:cubic-bezier(0.34,1.56,0.64,1);
+  --text:#F0EAE4;--muted:#8A7D75;--dim:#4d4540;
+  --ease-expo:cubic-bezier(0.16,1,0.3,1);--ease-spring:cubic-bezier(0.34,1.56,0.64,1);
 }
-body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-img{max-width:100%;height:auto;display:block}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,video{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 button{cursor:pointer;border:none;background:none;font-family:inherit}
 
-/* ===== SCROLL REVEAL ===== */
-.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.8s var(--ease-expo),transform 0.8s var(--ease-expo)}
-.reveal.in{opacity:1;transform:none}
-.reveal-left{opacity:0;transform:translateX(-24px);transition:opacity 0.8s var(--ease-expo),transform 0.8s var(--ease-expo)}
-.reveal-left.in{opacity:1;transform:none}
-.reveal-scale{opacity:0;transform:scale(0.92);transition:opacity 0.7s var(--ease-expo),transform 0.7s var(--ease-expo)}
-.reveal-scale.in{opacity:1;transform:scale(1)}
-.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}.d5{transition-delay:.4s}
-
-/* ===== NAV ===== */
-nav{position:fixed;top:0;left:0;right:0;z-index:200;height:64px;padding:0 clamp(16px,4vw,56px);display:flex;align-items:center;justify-content:space-between;background:transparent;border-bottom:1px solid transparent;transition:background .4s ease,border-color .4s ease,backdrop-filter .4s ease}
-nav.scrolled{background:rgba(8,6,4,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom-color:var(--border)}
-.nav-logo img{height:28px;width:auto}
-.nav-links{display:flex;align-items:center;gap:32px;list-style:none}
-.nav-links a{font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);transition:color .2s}
-.nav-links a:hover{color:var(--text)}
-.nav-cta{display:inline-flex;align-items:center;gap:8px;padding:9px 22px;background:var(--red);color:#fff;border-radius:100px;font-size:.8rem;font-weight:700;letter-spacing:.04em;transition:background .2s,transform .2s var(--ease-spring),box-shadow .2s}
-.nav-cta:hover{background:#FF4433;transform:translateY(-2px) scale(1.02);box-shadow:0 8px 24px var(--red-glow)}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 clamp(16px,4vw,56px);display:flex;align-items:center;justify-content:space-between;transition:background .4s ease,border-color .4s ease,backdrop-filter .4s ease;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(8,6,4,.92);backdrop-filter:blur(20px);border-bottom-color:var(--border)}
+.nav-logo img{height:26px;width:auto}
+.nav-links{display:flex;align-items:center;gap:28px;list-style:none}
+.nav-links a{font-size:.76rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.65);transition:color .2s}
+.nav-links a:hover{color:#fff}
+.btn-red-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;border-radius:100px;font-size:.78rem;font-weight:700;background:var(--red);color:#fff;transition:background .2s,transform .2s var(--ease-spring),box-shadow .2s}
+.btn-red-pill:hover{background:#FF4433;transform:translateY(-1px) scale(1.02);box-shadow:0 6px 20px var(--red-glow)}
 .ham{display:none;flex-direction:column;gap:5px;padding:8px}
-.ham span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
-.mob-menu{display:none;position:fixed;top:64px;left:0;right:0;z-index:190;background:rgba(8,6,4,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-direction:column}
+.ham span{display:block;width:22px;height:2px;background:#fff;border-radius:2px}
+.mob-menu{display:none;position:fixed;top:60px;left:0;right:0;z-index:190;background:rgba(8,6,4,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-direction:column}
 .mob-menu.open{display:flex}
-.mob-menu a{font-size:1rem;font-weight:500;color:var(--muted);padding:18px clamp(16px,4vw,40px);border-bottom:1px solid var(--border);transition:color .2s,background .2s}
-.mob-menu a:hover{color:var(--text);background:rgba(255,255,255,.02)}
+.mob-menu a{font-size:1rem;font-weight:500;color:var(--muted);padding:16px clamp(16px,4vw,40px);border-bottom:1px solid var(--border);transition:color .2s}
+.mob-menu a:hover{color:var(--text)}
 
-/* ===== HERO ===== */
-.hero{min-height:100svh;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.hero-bg{position:absolute;inset:0;z-index:0}
-.hero-bg img{width:100%;height:100%;object-fit:cover;opacity:.3;filter:saturate(0.8)}
-.hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(8,6,4,.5) 0%,rgba(8,6,4,.1) 40%,rgba(8,6,4,.98) 100%)}
-.hero-glow{position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 60% 50% at 50% 40%,rgba(230,50,33,.05) 0%,transparent 70%)}
-.hero-inner{position:relative;z-index:2;text-align:center;padding:120px clamp(16px,6vw,80px) 80px;max-width:1100px}
-.hero-logo{margin:0 auto 36px;width:200px}
-.hero-logo img{width:100%;height:auto}
-.hero-h1{font-family:'DM Serif Display',serif;font-size:clamp(3.2rem,8.5vw,9rem);font-weight:400;line-height:.95;letter-spacing:-.02em;color:var(--text);margin-bottom:6px}
-.hero-h1 em{font-style:italic;color:var(--red)}
-.hero-tagline{font-size:clamp(.9rem,1.5vw,1.1rem);color:var(--muted);margin:20px auto 40px;max-width:520px;line-height:1.75}
-.hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-.btn-red{display:inline-flex;align-items:center;gap:10px;padding:16px 40px;background:var(--red);color:#fff;border-radius:100px;font-size:1rem;font-weight:700;letter-spacing:.02em;transition:background .2s,transform .2s var(--ease-spring),box-shadow .25s}
-.btn-red:hover{background:#FF4433;transform:translateY(-3px) scale(1.02);box-shadow:0 16px 40px var(--red-glow)}
-.btn-outline{display:inline-flex;align-items:center;gap:10px;padding:16px 36px;border:1.5px solid rgba(255,255,255,.18);color:var(--muted);border-radius:100px;font-size:1rem;font-weight:500;transition:border-color .2s,color .2s,background .2s}
-.btn-outline:hover{border-color:rgba(255,255,255,.4);color:var(--text);background:rgba(255,255,255,.04)}
-.hero-scroll{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--dim);font-size:.65rem;letter-spacing:.14em;text-transform:uppercase}
-.chevron{width:18px;height:18px;border-right:1.5px solid var(--dim);border-bottom:1.5px solid var(--dim);transform:rotate(45deg);animation:chev 2s ease-in-out infinite}
-@keyframes chev{0%,100%{transform:rotate(45deg) translateY(0)}50%{transform:rotate(45deg) translateY(6px)}}
+/* VIDEO LAYER - fixed behind everything */
+.video-layer{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.video-layer video{width:100%;height:100%;object-fit:cover}
+.video-dim{position:absolute;inset:0;background:rgba(8,6,4,.45)}
 
-/* ===== TICKER ===== */
-.ticker{border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:10px 0}
-.ticker-track{display:flex;animation:tick 30s linear infinite;width:max-content}
-.ticker-track:hover{animation-play-state:paused}
-@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.ticker-item{display:flex;align-items:center;gap:12px;padding:0 28px;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
-.tick-dot{width:4px;height:4px;border-radius:50%;background:var(--red);flex-shrink:0}
+/* SCROLL TRACK */
+#scroll-track{position:relative;z-index:1}
+.section-wrap{height:100vh}
 
-/* ===== SECTION COMMON ===== */
-section{padding:clamp(64px,9vw,120px) clamp(16px,5vw,72px)}
-.stag{font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:14px;display:block}
-.sh2{font-family:'DM Serif Display',serif;font-size:clamp(2.2rem,4.5vw,4rem);font-weight:400;line-height:1.05;letter-spacing:-.02em;color:var(--text);margin-bottom:18px}
+/* SCROLL SECTIONS */
+.scroll-section{position:sticky;top:0;height:100vh;width:100%;display:flex;flex-direction:column;overflow:hidden;pointer-events:auto}
+
+/* Section overlays */
+.sect-overlay-hero{background:linear-gradient(180deg,rgba(8,6,4,.4) 0%,rgba(8,6,4,.05) 35%,rgba(8,6,4,.7) 80%,rgba(8,6,4,.95) 100%)}
+.sect-overlay-process{background:linear-gradient(180deg,rgba(8,6,4,.6) 0%,rgba(8,6,4,.2) 30%,rgba(8,6,4,.75) 100%)}
+.sect-overlay-story{background:linear-gradient(90deg,rgba(8,6,4,.85) 0%,rgba(8,6,4,.3) 60%,rgba(8,6,4,.1) 100%)}
+.sect-overlay-lineup{background:linear-gradient(180deg,rgba(8,6,4,.3) 0%,rgba(8,6,4,.6) 70%,rgba(8,6,4,.95) 100%)}
+.sect-overlay{position:absolute;inset:0}
+
+/* Section content */
+.sect-content{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;padding:80px clamp(20px,6vw,100px) clamp(32px,5vh,64px)}
+.sect-content.center{align-items:center;justify-content:center;text-align:center}
+.sect-content.bottom{justify-content:flex-end}
+.sect-content.story-layout{flex-direction:row;align-items:center;gap:clamp(32px,5vw,80px);padding-top:100px}
+
+/* Section text animations */
+.sect-text{opacity:0;transform:translateY(24px);transition:opacity .9s var(--ease-expo),transform .9s var(--ease-expo)}
+.section-wrap.active .sect-text{opacity:1;transform:none}
+.sect-text.d1{transition-delay:.1s}
+.sect-text.d2{transition-delay:.2s}
+.sect-text.d3{transition-delay:.3s}
+.sect-text.d4{transition-delay:.4s}
+
+/* Typography */
+.sect-tag{font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:12px}
+.sect-h1{font-family:'DM Serif Display',serif;font-size:clamp(3rem,7.5vw,8rem);font-weight:400;line-height:.95;letter-spacing:-.02em;color:#fff;margin-bottom:20px;text-shadow:0 2px 40px rgba(0,0,0,.4)}
+.sect-h1 em{font-style:italic;color:#F5A623}
+.sect-h2{font-family:'DM Serif Display',serif;font-size:clamp(2.4rem,5vw,5.5rem);font-weight:400;line-height:1;letter-spacing:-.02em;color:#fff;margin-bottom:16px;text-shadow:0 2px 32px rgba(0,0,0,.5)}
+.sect-h2 em{font-style:italic;color:var(--red)}
+.sect-sub{font-size:clamp(.9rem,1.4vw,1.05rem);color:rgba(255,255,255,.75);max-width:540px;line-height:1.75;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+.sect-ctas{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}
+.sect-ctas.center-ctas{justify-content:center}
+.btn-hero{display:inline-flex;align-items:center;gap:10px;padding:15px 36px;border-radius:100px;font-size:.95rem;font-weight:700;background:var(--red);color:#fff;transition:background .2s,transform .2s var(--ease-spring),box-shadow .2s}
+.btn-hero:hover{background:#FF4433;transform:translateY(-2px);box-shadow:0 12px 32px var(--red-glow)}
+.btn-ghost-white{display:inline-flex;align-items:center;gap:10px;padding:15px 32px;border-radius:100px;font-size:.95rem;font-weight:500;border:1.5px solid rgba(255,255,255,.3);color:rgba(255,255,255,.8);transition:all .2s}
+.btn-ghost-white:hover{border-color:rgba(255,255,255,.7);color:#fff;background:rgba(255,255,255,.07)}
+
+/* Process pills */
+.process-pills{display:flex;flex-direction:column;gap:14px;margin-top:28px}
+.process-pill{display:inline-flex;align-items:center;gap:12px;background:rgba(8,6,4,.55);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:10px 22px;font-size:clamp(.9rem,1.5vw,1.1rem);font-weight:600;color:#fff;width:fit-content}
+.process-pill::before{content:'✓';color:var(--red);font-weight:800}
+
+/* Story section */
+.story-text-col{flex:1;max-width:520px}
+.story-img-col{flex:0 0 auto}
+.story-photo{width:clamp(200px,28vw,380px);aspect-ratio:3/4;border-radius:20px;overflow:hidden;border:2px solid rgba(255,255,255,.1)}
+.story-photo img{width:100%;height:100%;object-fit:cover}
+.story-sig{height:44px;width:auto;margin-top:20px;opacity:.8}
+.pullquote{font-family:'DM Serif Display',serif;font-size:clamp(1.1rem,1.8vw,1.5rem);font-style:italic;line-height:1.55;color:rgba(255,255,255,.9);border-left:3px solid var(--red);padding-left:20px;margin:20px 0;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+
+/* Lineup section */
+.lineup-mini{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:32px;max-width:900px}
+.lineup-card{background:rgba(17,16,9,.75);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;transition:border-color .3s,transform .3s var(--ease-expo)}
+.lineup-card:hover{transform:translateY(-4px);border-color:rgba(230,50,33,.5)}
+.lineup-mini-img{width:90px;height:90px;object-fit:contain;filter:drop-shadow(0 8px 20px rgba(0,0,0,.6));transition:transform .4s var(--ease-expo)}
+.lineup-card:hover .lineup-mini-img{transform:scale(1.08)}
+.lineup-mini-name{font-family:'DM Serif Display',serif;font-size:.92rem;color:#fff;text-align:center;line-height:1.2}
+.lineup-mini-avail{font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+/* Scroll indicator */
+.scroll-indicator{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,.4);font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;animation:scrollFade 2s ease 1.5s both}
+.scroll-indicator .ch{width:18px;height:18px;border-right:1.5px solid rgba(255,255,255,.4);border-bottom:1.5px solid rgba(255,255,255,.4);transform:rotate(45deg);animation:chevBounce 2s ease-in-out infinite}
+@keyframes chevBounce{0%,100%{transform:rotate(45deg) translateY(0)}50%{transform:rotate(45deg) translateY(6px)}}
+@keyframes scrollFade{from{opacity:0}to{opacity:1}}
+
+/* ===== SOLID SECTION (below scroll track) ===== */
+.solid-section{position:relative;z-index:1;background:var(--bg)}
+
+/* VAULT TEASER */
+.vault-teaser{padding:clamp(64px,9vw,100px) clamp(20px,5vw,72px);border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.vault-teaser::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(230,50,33,.04),transparent 70%)}
+.vault-teaser::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--red),transparent)}
+.vt-inner{max-width:1100px;margin:0 auto}
+.vt-head{text-align:center;margin-bottom:clamp(32px,4vw,56px)}
+.vt-tag{font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:12px;display:block}
+.vt-title{font-family:'DM Serif Display',serif;font-size:clamp(2.4rem,5vw,4.5rem);font-weight:400;letter-spacing:-.02em;line-height:1.05;margin-bottom:14px}
+.vt-title em{font-style:italic;color:var(--red)}
+.vt-sub{font-size:.92rem;color:var(--muted);line-height:1.75;max-width:460px;margin:0 auto 28px}
+.vt-link{display:inline-flex;align-items:center;gap:10px;padding:13px 32px;border-radius:100px;font-size:.88rem;font-weight:700;background:var(--red);color:#fff;transition:background .2s,transform .2s var(--ease-spring),box-shadow .2s}
+.vt-link:hover{background:#FF4433;transform:translateY(-2px);box-shadow:0 10px 28px var(--red-glow)}
+.vt-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:clamp(28px,4vw,48px)}
+.vt-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:12px;position:relative;transition:border-color .3s,transform .3s var(--ease-expo)}
+.vt-card:hover{border-color:rgba(230,50,33,.45);transform:translateY(-4px)}
+.vt-card.top1{border-color:rgba(230,50,33,.4);background:linear-gradient(145deg,rgba(230,50,33,.07),transparent 70%)}
+.vt-rank{font-size:.62rem;font-weight:700;letter-spacing:.1em;color:var(--dim);text-transform:uppercase}
+.vt-img{width:100px;height:100px;object-fit:contain;filter:drop-shadow(0 10px 22px rgba(0,0,0,.5));transition:transform .4s var(--ease-expo)}
+.vt-card:hover .vt-img{transform:scale(1.07)}
+.vt-name{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--text);text-align:center}
+.vt-votes{font-size:.76rem;color:var(--muted)}
+.vt-coming{font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--red);background:rgba(230,50,33,.15);border:1px solid rgba(230,50,33,.3);padding:3px 10px;border-radius:100px}
+
+/* ORDER */
+.order-section{padding:clamp(56px,8vw,96px) clamp(20px,5vw,72px);border-bottom:1px solid var(--border)}
+.order-inner{max-width:1100px;margin:0 auto;text-align:center}
+.stag{font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:12px;display:block}
+.sh2{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:400;letter-spacing:-.02em;margin-bottom:0}
 .sh2 em{font-style:italic;color:var(--gold)}
-.sbody{font-size:clamp(.92rem,1.1vw,1rem);color:var(--muted);line-height:1.82;max-width:480px}
-.section-inner{max-width:1240px;margin:0 auto}
+.order-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:clamp(28px,4vw,48px)}
+.oc{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:clamp(20px,3vw,30px);text-align:left;display:flex;flex-direction:column;gap:12px;transition:border-color .3s,transform .3s var(--ease-expo)}
+.oc:hover{transform:translateY(-4px);border-color:rgba(230,50,33,.4)}
+.oc-icon{font-size:1.4rem}
+.oc-title{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--text)}
+.oc-desc{font-size:.8rem;color:var(--muted);line-height:1.7;flex:1}
+.oc-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.oc-list li{font-size:.77rem;color:var(--muted);display:flex;align-items:flex-start;gap:8px}
+.oc-list li::before{content:'→';color:var(--red);font-weight:700;flex-shrink:0}
+.oc-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;border-radius:100px;font-size:.8rem;font-weight:700;background:var(--red);color:#fff;transition:background .2s,transform .2s var(--ease-spring);margin-top:4px}
+.oc-btn:hover{background:#FF4433;transform:translateY(-1px)}
+.oc-btn.ghost{background:transparent;border:1.5px solid var(--border);color:var(--muted)}
+.oc-btn.ghost:hover{border-color:var(--red);color:var(--red);background:var(--red-dim)}
 
-/* ===== COOKIE CARD ===== */
-.cookie-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .3s,transform .35s var(--ease-expo),box-shadow .35s}
-.cookie-card:hover{transform:translateY(-6px);box-shadow:0 24px 56px rgba(0,0,0,.5)}
-.cookie-card.choc:hover{border-color:rgba(180,100,30,.5)}
-.cookie-card.fruit:hover{border-color:rgba(220,80,80,.45)}
-.cookie-card.gold:hover{border-color:rgba(200,150,40,.45)}
-.cookie-card.green:hover{border-color:rgba(80,180,80,.4)}
-.cookie-img-wrap{position:relative;padding:28px 28px 16px;background:linear-gradient(135deg,var(--surface-2) 0%,var(--surface) 100%);display:flex;align-items:center;justify-content:center;min-height:180px}
-.cookie-img{width:140px;height:140px;object-fit:contain;filter:drop-shadow(0 16px 32px rgba(0,0,0,.5));transition:transform .5s var(--ease-expo)}
-.cookie-card:hover .cookie-img{transform:scale(1.06) translateY(-4px)}
-.cookie-card.choc .cookie-img{filter:drop-shadow(0 16px 40px rgba(139,69,19,.5))}
-.cookie-card.fruit .cookie-img{filter:drop-shadow(0 16px 40px rgba(220,80,80,.4))}
-.cookie-card.gold .cookie-img{filter:drop-shadow(0 16px 40px rgba(200,150,40,.4))}
-.cookie-card.green .cookie-img{filter:drop-shadow(0 16px 40px rgba(80,180,80,.35))}
-.cookie-avail{position:absolute;top:14px;left:14px;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:100px}
-.avail-week{background:rgba(230,50,33,.15);color:var(--red);border:1px solid rgba(230,50,33,.3)}
-.avail-month{background:rgba(245,166,35,.12);color:var(--gold);border:1px solid rgba(245,166,35,.25)}
-.avail-return{background:rgba(80,180,80,.12);color:#6dd68a;border:1px solid rgba(80,180,80,.25)}
-.cookie-body{padding:0 22px 22px;flex:1;display:flex;flex-direction:column;gap:10px}
-.cookie-name{font-family:'DM Serif Display',serif;font-size:1.3rem;font-weight:400;color:var(--text);line-height:1.15}
-.cookie-desc{font-size:.82rem;color:var(--muted);line-height:1.7;flex:1}
-.cookie-shop{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:600;color:var(--red);letter-spacing:.03em;margin-top:4px;transition:gap .2s}
-.cookie-shop:hover{gap:10px}
-
-/* ===== GRID LAYOUTS ===== */
-.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-
-/* ===== ACTIVE SECTION ===== */
-.active-section{border-bottom:1px solid var(--border)}
-.active-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:clamp(32px,5vw,56px);flex-wrap:wrap;gap:20px}
-
-/* ===== RETURNING ===== */
-.returning-section{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.returning-head{text-align:center;margin-bottom:clamp(32px,5vw,56px)}
-.returning-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;max-width:760px;margin:0 auto}
-
-/* ===== THE VAULT ===== */
-.vault-section{background:var(--bg);position:relative;overflow:hidden}
-.vault-section::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--red),transparent)}
-.vault-bg-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'DM Serif Display',serif;font-size:clamp(8rem,20vw,22rem);font-weight:400;color:rgba(255,255,255,.015);white-space:nowrap;pointer-events:none;user-select:none;letter-spacing:.1em}
-.vault-inner{position:relative;z-index:1;max-width:1240px;margin:0 auto}
-.vault-head{text-align:center;margin-bottom:40px}
-.vault-title{font-family:'DM Serif Display',serif;font-size:clamp(3rem,8vw,8rem);font-weight:400;line-height:.9;letter-spacing:-.02em;color:var(--text);margin-bottom:12px}
-.vault-title em{font-style:italic;color:var(--red)}
-.vault-sub{font-size:clamp(.9rem,1.3vw,1rem);color:var(--muted);margin-bottom:36px;line-height:1.7}
-
-/* ===== COUNTDOWN ===== */
-.countdown-wrap{display:inline-flex;flex-direction:column;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px 36px;margin-bottom:48px}
-.countdown-label{font-size:.65rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--red)}
-.countdown-clock{display:flex;align-items:center;gap:4px}
-.cd-unit{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:64px}
-.cd-num{font-family:'DM Serif Display',serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:400;color:var(--text);line-height:1;transition:all .25s var(--ease-expo)}
-.cd-unit-label{font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
-.cd-sep{font-family:'DM Serif Display',serif;font-size:2.5rem;color:var(--red);margin-top:-16px;opacity:.6}
-
-/* ===== VAULT CARDS ===== */
-.vault-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.vault-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden;transition:border-color .3s,transform .35s var(--ease-expo),box-shadow .35s}
-.vault-card:hover{transform:translateY(-5px);box-shadow:0 20px 48px rgba(0,0,0,.45)}
-.vault-card.top3{border-color:rgba(230,50,33,.4);background:linear-gradient(145deg,rgba(230,50,33,.05) 0%,transparent 60%)}
-.vault-coming-back{position:absolute;top:12px;right:12px;font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--red);background:rgba(230,50,33,.15);border:1px solid rgba(230,50,33,.3);padding:3px 10px;border-radius:100px}
-.vault-rank{font-size:.62rem;font-weight:700;letter-spacing:.1em;color:var(--dim);text-transform:uppercase}
-.vault-img{width:100px;height:100px;object-fit:contain;margin:0 auto;filter:drop-shadow(0 12px 24px rgba(0,0,0,.5));transition:transform .5s var(--ease-expo)}
-.vault-card:hover .vault-img{transform:scale(1.08) translateY(-3px)}
-.vault-name{font-family:'DM Serif Display',serif;font-size:1.1rem;font-weight:400;color:var(--text);line-height:1.15;text-align:center}
-.vault-vote-row{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
-.vote-count{display:flex;align-items:center;gap:6px;font-size:.82rem;font-weight:600;color:var(--muted)}
-.vote-count span{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--text);min-width:24px;display:inline-block;transition:all .3s var(--ease-expo)}
-.vote-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:100px;font-size:.78rem;font-weight:700;background:rgba(230,50,33,.1);border:1px solid rgba(230,50,33,.3);color:var(--red);cursor:pointer;transition:all .2s var(--ease-spring);position:relative;white-space:nowrap}
-.vote-btn:hover{background:var(--red);color:#fff;border-color:var(--red);transform:scale(1.05)}
-.vote-btn.voted{background:rgba(80,180,80,.1);border-color:rgba(80,180,80,.3);color:#6dd68a;cursor:default}
-.vote-btn.voted:hover{transform:none}
-.vote-btn.ineligible{opacity:.4;cursor:not-allowed}
-.vote-btn.ineligible:hover{transform:none;background:rgba(230,50,33,.1)}
-.fire-icon{font-size:1rem;transition:transform .2s}
-.vote-btn:not(.voted):not(.ineligible):hover .fire-icon{transform:scale(1.3)}
-
-/* ===== VOTE BURST ===== */
-.burst-particle{position:absolute;pointer-events:none;font-size:1rem;animation:burst .8s var(--ease-expo) forwards}
-@keyframes burst{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0)}}
-
-/* ===== ALL FLAVORS ===== */
-.flavors-section{background:var(--surface);border-top:1px solid var(--border)}
-.flavors-inner{max-width:1240px;margin:0 auto}
-.flavors-head{text-align:center;margin-bottom:36px}
-.filter-tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:40px}
-.filter-tab{padding:8px 18px;border-radius:100px;font-size:.76rem;font-weight:600;letter-spacing:.05em;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .2s}
-.filter-tab:hover{border-color:var(--border-light);color:var(--text)}
-.filter-tab.active{background:var(--red);border-color:var(--red);color:#fff}
-.flavors-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
-.flavor-card{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:10px;cursor:pointer;transition:border-color .3s,transform .35s var(--ease-expo)}
-.flavor-card:hover{transform:translateY(-4px);border-color:var(--border-light)}
-.flavor-img{width:80px;height:80px;object-fit:contain;margin:0 auto;filter:drop-shadow(0 8px 16px rgba(0,0,0,.4));transition:transform .4s var(--ease-expo)}
-.flavor-card:hover .flavor-img{transform:scale(1.1)}
-.flavor-name{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--text);text-align:center;line-height:1.2}
-.flavor-status-badge{font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:100px;display:block;width:fit-content;margin:0 auto}
-.badge-active{background:rgba(230,50,33,.12);color:var(--red);border:1px solid rgba(230,50,33,.25)}
-.badge-returning{background:rgba(80,180,80,.12);color:#6dd68a;border:1px solid rgba(80,180,80,.25)}
-.badge-vault{background:rgba(90,85,80,.2);color:var(--muted);border:1px solid var(--border)}
-.badge-ineligible{background:rgba(60,55,50,.2);color:var(--dim);border:1px solid var(--border)}
-.hidden{display:none}
-
-/* ===== STORY ===== */
-.story-section{border-top:1px solid var(--border)}
-.story-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,7vw,100px);align-items:center}
-.story-img-box{border-radius:20px;overflow:hidden;aspect-ratio:3/4;position:relative}
-.story-img-box img{width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease-expo)}
-.story-img-box:hover img{transform:scale(1.04)}
-.sig{margin-top:24px;height:48px;width:auto;opacity:.8}
-.pullquote{font-family:'DM Serif Display',serif;font-size:clamp(1.1rem,2vw,1.5rem);font-style:italic;line-height:1.55;color:var(--text);border-left:3px solid var(--red);padding-left:22px;margin:24px 0}
-
-/* ===== ORDER ===== */
-.order-section{background:var(--surface);border-top:1px solid var(--border)}
-.order-inner{max-width:1240px;margin:0 auto}
-.order-head{text-align:center;margin-bottom:clamp(36px,5vw,64px)}
-.order-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.order-card{background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:clamp(22px,3vw,36px);display:flex;flex-direction:column;gap:14px;transition:border-color .3s,transform .35s var(--ease-expo),box-shadow .35s}
-.order-card:hover{transform:translateY(-5px);box-shadow:0 20px 48px rgba(0,0,0,.4);border-color:rgba(230,50,33,.4)}
-.order-card.star{border-color:rgba(230,50,33,.4);background:linear-gradient(145deg,rgba(230,50,33,.06) 0%,transparent 60%)}
-.order-icon{width:48px;height:48px;border-radius:14px;background:rgba(230,50,33,.1);border:1px solid rgba(230,50,33,.2);display:flex;align-items:center;justify-content:center;font-size:1.4rem}
-.order-title{font-family:'DM Serif Display',serif;font-size:1.35rem;color:var(--text);line-height:1.2}
-.order-desc{font-size:.87rem;color:var(--muted);line-height:1.75;flex:1}
-.order-list{list-style:none;display:flex;flex-direction:column;gap:7px}
-.order-list li{display:flex;align-items:flex-start;gap:10px;font-size:.8rem;color:var(--muted);line-height:1.5}
-.order-list li::before{content:'→';color:var(--red);flex-shrink:0;font-weight:700}
-.order-cta{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 20px;border-radius:100px;font-size:.84rem;font-weight:700;background:var(--red);color:#fff;transition:background .2s,transform .2s var(--ease-spring),box-shadow .2s;margin-top:6px}
-.order-cta:hover{background:#FF4433;transform:translateY(-2px);box-shadow:0 8px 20px var(--red-glow)}
-.order-cta.ghost{background:transparent;border:1.5px solid var(--border);color:var(--muted)}
-.order-cta.ghost:hover{border-color:var(--red);color:var(--red);background:var(--red-dim);box-shadow:none}
-
-/* ===== CTA BANNER ===== */
-.cta-banner{border-top:1px solid var(--border);text-align:center;position:relative;overflow:hidden;background:linear-gradient(145deg,#140a06 0%,#1a1108 50%,var(--bg) 100%)}
-.cta-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 90% at 50% 50%,rgba(230,50,33,.05),transparent 70%);pointer-events:none}
-.cta-banner-inner{position:relative;z-index:1;max-width:620px;margin:0 auto}
-.cta-h2{font-family:'DM Serif Display',serif;font-size:clamp(2rem,5vw,3.8rem);font-weight:400;line-height:1.08;margin-bottom:16px}
-.cta-h2 em{font-style:italic;color:var(--red)}
-.cta-p{color:var(--muted);margin-bottom:36px;line-height:1.75;font-size:.97rem}
-.cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-
-/* ===== FOOTER ===== */
-footer{padding:clamp(48px,7vw,80px) clamp(16px,4vw,72px) 32px;border-top:1px solid var(--border)}
-.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;max-width:1200px;margin:0 auto 48px}
-.footer-logo-img{height:28px;width:auto;margin-bottom:16px;opacity:.8}
-.footer-tagline{font-size:.83rem;color:var(--muted);line-height:1.75;max-width:260px}
-.fc-head{font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:18px}
-.fc-links{list-style:none;display:flex;flex-direction:column;gap:12px}
-.fc-links a{font-size:.83rem;color:var(--muted);transition:color .2s}
-.fc-links a:hover{color:var(--text)}
-.footer-bottom{border-top:1px solid var(--border);padding-top:24px;display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;flex-wrap:wrap;gap:12px}
-.footer-copy,.footer-heart{font-size:.76rem;color:var(--dim)}
+/* FOOTER */
+footer{padding:clamp(32px,5vw,56px) clamp(20px,5vw,72px) 28px;border-top:1px solid var(--border)}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-logo img{height:22px;opacity:.7}
+.footer-copy{font-size:.74rem;color:var(--dim)}
+.footer-heart{font-size:.74rem;color:var(--dim)}
 .footer-heart em{font-style:normal;color:var(--red)}
 
-/* ===== LOADING ===== */
-#loading{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;align-items:center;justify-content:center;transition:opacity .5s ease}
-#loading.done{opacity:0;pointer-events:none}
-.loading-logo{width:120px;animation:pulse-load 1.5s ease-in-out infinite}
-@keyframes pulse-load{0%,100%{opacity:.4;transform:scale(0.97)}50%{opacity:1;transform:scale(1)}}
+/* REVEAL (for solid sections) */
+.rev{opacity:0;transform:translateY(18px);transition:opacity .8s var(--ease-expo),transform .8s var(--ease-expo)}
+.rev.in{opacity:1;transform:none}
+.r1{transition-delay:.08s}.r2{transition-delay:.16s}.r3{transition-delay:.24s}
 
-/* ===== FLOAT CTA (removed - was overlapping content) ===== */
-.float-cta{display:none!important}
-
-/* ===== RESPONSIVE ===== */
-@media(max-width:1000px){
+/* RESPONSIVE */
+@media(max-width:960px){
   .nav-links{display:none}
-  nav .nav-cta{display:none}
+  nav .btn-red-pill{display:none}
   .ham{display:flex}
-  .grid-4{grid-template-columns:repeat(2,1fr)}
-  .vault-grid{grid-template-columns:repeat(2,1fr)}
-  .order-grid{grid-template-columns:1fr}
-  .story-inner{grid-template-columns:1fr}
-  .story-img-box{aspect-ratio:16/9}
-  .footer-top{grid-template-columns:1fr 1fr}
+  .lineup-mini{grid-template-columns:repeat(2,1fr)}
+  .sect-content.story-layout{flex-direction:column;padding-top:80px;gap:20px}
+  .story-photo{width:clamp(140px,45vw,280px);aspect-ratio:4/3}
+  .vt-cards{grid-template-columns:1fr}
+  .order-cards{grid-template-columns:1fr}
 }
 @media(max-width:640px){
-  .grid-4,.grid-3{grid-template-columns:repeat(2,1fr)}
-  .footer-top{grid-template-columns:1fr}
-  .footer-bottom{flex-direction:column;text-align:center}
-  .hero-ctas{flex-direction:column;align-items:center}
-  .cta-row{flex-direction:column;align-items:center}
-  .filter-tabs{gap:6px}
-  .vault-grid,.flavors-grid{grid-template-columns:repeat(2,1fr)}
-  .cookie-img{width:110px;height:110px}
-  .vault-img{width:80px;height:80px}
-}
-@media(max-width:400px){
-  .grid-4,.grid-3{grid-template-columns:1fr}
-  .vault-grid,.flavors-grid{grid-template-columns:1fr}
+  .lineup-mini{grid-template-columns:repeat(2,1fr)}
+  .sect-ctas{flex-direction:column;align-items:center}
+  .footer-inner{flex-direction:column;text-align:center}
 }
 </style>
 </head>
 <body>
 
-<!-- LOADING -->
-<div id="loading">
-  <img class="loading-logo" src="https://kurtyscookies.com/cdn/shop/files/Horizontal_Logo_White_Header_140x.png?v=1735790614&width=600" alt="Kurty's Cookies">
+<!-- VIDEO LAYER (fixed, z-index:0) -->
+<div class="video-layer">
+  <video id="hero-video" muted playsinline preload="auto" src="https://pub.hyperagent.com/api/published/pbf01M31RKZBZ_1ZFMDR6R18WXPR3H/08552c2d-bc9f-4ecb-a849-55aec51df668.mp4"></video>
+  <div class="video-dim"></div>
 </div>
 
 <!-- NAV -->
 <nav id="nav">
-  <a href="#" class="nav-logo"><img src="https://kurtyscookies.com/cdn/shop/files/Horizontal_Logo_White_Header_140x.png?v=1735790614&width=600" alt="Kurty's Cookies" height="28"></a>
+  <a href="index.html" class="nav-logo"><img src="https://kurtyscookies.com/cdn/shop/files/Horizontal_Logo_White_Header_140x.png?v=1735790614&width=600" alt="Kurty's Cookies" height="26"></a>
   <ul class="nav-links">
-    <li><a href="#active">This Week</a></li>
-    <li><a href="#vault">The Vault</a></li>
-    <li><a href="#flavors">All Flavors</a></li>
-    <li><a href="#story">Our Story</a></li>
+    <li><a href="#order">Order</a></li>
+    <li><a href="vault.html">The Vault</a></li>
+    <li><a href="vault.html#flavors">All Flavors</a></li>
     <li><a href="https://kurtyscookies.com/pages/catering" target="_blank" rel="noopener">Catering</a></li>
   </ul>
-  <a href="#order" class="nav-cta">Order Now →</a>
+  <a href="vault.html" class="btn-red-pill">Vote 🔥</a>
   <button class="ham" id="ham" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
 <div class="mob-menu" id="mobMenu">
-  <a href="#active" onclick="closeMob()">This Week</a>
-  <a href="#vault" onclick="closeMob()">The Vault</a>
-  <a href="#flavors" onclick="closeMob()">All Flavors</a>
-  <a href="#story" onclick="closeMob()">Our Story</a>
   <a href="#order" onclick="closeMob()">Order</a>
-  <a href="https://kurtyscookies.com/pages/catering" target="_blank" rel="noopener">Catering ↗</a>
+  <a href="vault.html" onclick="closeMob()">The Vault</a>
+  <a href="vault.html#flavors" onclick="closeMob()">All Flavors</a>
+  <a href="https://kurtyscookies.com/pages/catering" target="_blank" rel="noopener">Catering</a>
 </div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg">
-    <img src="https://pub.hyperagent.com/api/published/pbf01M2ZPSDEH_J20CKFY673EWJYDA/d50341cf-b28e-4a3a-8b0e-a55bbe560275.png" alt="Kurty's Cookies hero" fetchpriority="high">
-  </div>
-  <div class="hero-overlay"></div>
-  <div class="hero-glow"></div>
-  <div class="hero-inner">
-    <div class="hero-logo reveal">
-      <img src="https://kurtyscookies.com/cdn/shop/files/Horizontal_Logo_White_Header_140x.png?v=1735790614&width=600" alt="Kurty's Cookies">
-    </div>
-    <h1 class="hero-h1 reveal d1">The Best<br><em>Damn</em> Cookies<br>In Austin, TX</h1>
-    <p class="hero-tagline reveal d2">No preservatives. No artificial anything. No fucking shortcuts. Made by brothers, from scratch, every time.</p>
-    <div class="hero-ctas reveal d3">
-      <a href="#order" class="btn-red">Order Now →</a>
-      <a href="#vault" class="btn-outline">Vote in The Vault 🔥</a>
-    </div>
-  </div>
-  <div class="hero-scroll">
-    <span>Scroll</span>
-    <div class="chevron"></div>
-  </div>
-</section>
+<!-- SCROLL TRACK (400vh, maps to video) -->
+<div id="scroll-track">
 
-<!-- TICKER -->
-<div class="ticker">
-  <div class="ticker-track">
-    <div class="ticker-item"><div class="tick-dot"></div>Real Organic Ingredients</div>
-    <div class="ticker-item"><div class="tick-dot"></div>No Preservatives Ever</div>
-    <div class="ticker-item"><div class="tick-dot"></div>Dough Chilled 1–3 Days</div>
-    <div class="ticker-item"><div class="tick-dot"></div>Austin, Texas</div>
-    <div class="ticker-item"><div class="tick-dot"></div>Saturday Farmer's Markets</div>
-    <div class="ticker-item"><div class="tick-dot"></div>Friday Delivery</div>
-    <div class="ticker-item"><div class="tick-dot"></div>Catering Available</div>
-    <div class="ticker-item"><div class="tick-dot"></div>Licensed Commercial Kitchen</div>
-    <div class="ticker-item"><div class="tick-dot"></div>35+ Unique Flavors Created</div>
-    <div class="ticker-item"><div class="tick-dot"></div>Vote Monthly · Top 3 Return</div>
-    <div class="ticker-item"><div class="tick-dot"></div>Real Organic Ingredients</div>
-    <div class="ticker-item"><div class="tick-dot"></div>No Preservatives Ever</div>
-    <div class="ticker-item"><div class="tick-dot"></div>Dough Chilled 1–3 Days</div>
-    <div class="ticker-item"><div class="tick-dot"></div>Austin, Texas</div>
-    <div class="ticker-item"><div class="tick-dot"></div>Saturday Farmer's Markets</div>
-    <div class="ticker-item"><div class="tick-dot"></div>Friday Delivery</div>
-    <div class="ticker-item"><div class="tick-dot"></div>Catering Available</div>
-    <div class="ticker-item"><div class="tick-dot"></div>Licensed Commercial Kitchen</div>
-    <div class="ticker-item"><div class="tick-dot"></div>35+ Unique Flavors Created</div>
-    <div class="ticker-item"><div class="tick-dot"></div>Vote Monthly · Top 3 Return</div>
-  </div>
-</div>
-
-<!-- ACTIVE LINEUP -->
-<section class="active-section" id="active">
-  <div class="section-inner">
-    <div class="active-head">
-      <div>
-        <span class="stag reveal">Right Now</span>
-        <h2 class="sh2 reveal d1">What's in<br>the case <em>this week.</em></h2>
+  <!-- SECTION 1: HERO -->
+  <div class="section-wrap" id="sw1">
+    <div class="scroll-section">
+      <div class="sect-overlay sect-overlay-hero"></div>
+      <div class="sect-content center">
+        <img src="https://kurtyscookies.com/cdn/shop/files/Horizontal_Logo_White_Header_140x.png?v=1735790614&width=600" alt="Kurty's Cookies" style="height:36px;width:auto;margin:0 auto 28px;opacity:.95" class="sect-text">
+        <h1 class="sect-h1 sect-text d1">The Best<br><em>Damn</em> Cookies<br>In Austin, TX</h1>
+        <p class="sect-sub sect-text d2">No preservatives. No artificial anything.<br>No fucking shortcuts. Made by brothers, from scratch, every time.</p>
+        <div class="sect-ctas center-ctas sect-text d3">
+          <a href="#order" class="btn-hero">Order Now →</a>
+          <a href="vault.html" class="btn-ghost-white">Vote in The Vault 🔥</a>
+        </div>
       </div>
-      <p class="sbody reveal d2" style="max-width:320px">Fresh-baked and available. Pre-order for pickup at any of our Saturday Austin farmer's markets — or get Friday delivery.</p>
-    </div>
-    <div class="grid-4" id="active-grid">
-      <!-- Rendered by JS -->
-      <div class="cookie-card reveal" style="min-height:320px;background:var(--surface-2);animation:pulse-load 1.5s infinite"></div>
-      <div class="cookie-card reveal d1" style="min-height:320px;background:var(--surface-2);animation:pulse-load 1.5s infinite"></div>
-      <div class="cookie-card reveal d2" style="min-height:320px;background:var(--surface-2);animation:pulse-load 1.5s infinite"></div>
-      <div class="cookie-card reveal d3" style="min-height:320px;background:var(--surface-2);animation:pulse-load 1.5s infinite"></div>
+      <div class="scroll-indicator sect-text d4"><span>Scroll</span><div class="ch"></div></div>
     </div>
   </div>
-</section>
 
-<!-- RETURNING WINNERS -->
-<section class="returning-section" id="returning">
-  <div class="section-inner">
-    <div class="returning-head">
-      <span class="stag reveal">Fan-Voted · Returning This Month</span>
-      <h2 class="sh2 reveal d1">The people<br>have <em>spoken.</em></h2>
-      <p class="sbody reveal d2" style="margin:0 auto;text-align:center">These vault flavors won last month's vote. They're coming back.</p>
-    </div>
-    <div class="returning-grid" id="returning-grid">
-      <!-- Rendered by JS -->
-    </div>
-  </div>
-</section>
-
-<!-- THE VAULT -->
-<section class="vault-section" id="vault">
-  <div class="vault-bg-text">VAULT</div>
-  <div class="vault-inner">
-    <div class="vault-head">
-      <h2 class="vault-title reveal">The <em>Vault</em></h2>
-      <p class="vault-sub reveal d1">Every vaulted flavor we've ever baked. Vote for your favorites — the top 3 come back next month.<br>One vote per person. Voting closes the 25th at 9PM Central.</p>
-      <div class="countdown-wrap reveal d2">
-        <div class="countdown-label">⏱ Voting Closes In</div>
-        <div class="countdown-clock">
-          <div class="cd-unit"><span class="cd-num" id="cd-d">--</span><span class="cd-unit-label">Days</span></div>
-          <div class="cd-sep">:</div>
-          <div class="cd-unit"><span class="cd-num" id="cd-h">--</span><span class="cd-unit-label">Hrs</span></div>
-          <div class="cd-sep">:</div>
-          <div class="cd-unit"><span class="cd-num" id="cd-m">--</span><span class="cd-unit-label">Min</span></div>
-          <div class="cd-sep">:</div>
-          <div class="cd-unit"><span class="cd-num" id="cd-s">--</span><span class="cd-unit-label">Sec</span></div>
+  <!-- SECTION 2: THE DIFFERENCE -->
+  <div class="section-wrap" id="sw2">
+    <div class="scroll-section">
+      <div class="sect-overlay sect-overlay-process"></div>
+      <div class="sect-content bottom" style="padding-left:clamp(24px,8vw,120px)">
+        <div>
+          <div class="sect-tag sect-text">The Difference</div>
+          <h2 class="sect-h2 sect-text d1">No shortcuts.<br><em>No exceptions.</em></h2>
+          <div class="process-pills">
+            <div class="process-pill sect-text d2">Real butter. Real eggs. Organic flour.</div>
+            <div class="process-pill sect-text d3">Dough chilled 1–3 days before baking.</div>
+            <div class="process-pill sect-text d4">Zero preservatives. Zero artificial flavorings.</div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="vault-grid" id="vault-grid">
-      <!-- Rendered by JS -->
-    </div>
   </div>
-</section>
 
-<!-- ALL FLAVORS -->
-<section class="flavors-section" id="flavors">
-  <div class="flavors-inner">
-    <div class="flavors-head">
-      <span class="stag reveal">Complete Archive</span>
-      <h2 class="sh2 reveal d1">Every flavor<br>we've <em>ever baked.</em></h2>
-    </div>
-    <div class="filter-tabs reveal d2" id="filter-tabs">
-      <button class="filter-tab active" data-cat="all">All</button>
-      <button class="filter-tab" data-cat="chocolate">Chocolate</button>
-      <button class="filter-tab" data-cat="fruit">Fruit</button>
-      <button class="filter-tab" data-cat="deluxe">Deluxe</button>
-      <button class="filter-tab" data-cat="nuts">Nuts</button>
-      <button class="filter-tab" data-cat="no-nuts">No Nuts</button>
-      <button class="filter-tab" data-cat="gf-vegan">GF / Vegan</button>
-      <button class="filter-tab" data-cat="seasonal">Seasonal</button>
-      <button class="filter-tab" data-cat="founder-favorites">Founder Favs</button>
-    </div>
-    <div class="flavors-grid" id="flavors-grid">
-      <!-- Rendered by JS -->
-    </div>
-  </div>
-</section>
-
-<!-- STORY -->
-<section class="story-section" id="story">
-  <div class="story-inner">
-    <div class="story-img-box reveal-left">
-      <img src="https://kurtyscookies.com/cdn/shop/files/kurt_n_eric.png?v=1784701969" alt="Kurtis and Eric, founders of Kurty's Cookies" loading="lazy">
-    </div>
-    <div>
-      <span class="stag reveal">Our Story</span>
-      <h2 class="sh2 reveal d1">A Tesla engineer<br>and his twin started<br><em>a cookie company.</em></h2>
-      <blockquote class="pullquote reveal d2">
-        "We knew our cookies were better than anything else in Austin — especially the big chains. So we started a company."
-      </blockquote>
-      <p class="sbody reveal d3">I'm Kurtis — Tesla engineer by day, serial baker by night. My twin brother Eric and I started Kurty's because we wanted to build something together. We'd been making chocolate chip cookies that, objectively, destroyed Crumbl, Insomnia, and Tiff's. So we started a company. We had so much fun that we haven't looked back.</p>
-      <p class="sbody reveal d4" style="margin-top:16px">Every batch is made at Prep ATX — a fully licensed commercial kitchen in Austin — with real butter, real eggs, and organic flour. No shortcuts. No preservatives. No artificial anything. Just cookies that are, genuinely, fucking amazing.</p>
-      <img src="https://kurtyscookies.com/cdn/shop/files/sig_1.png?v=1705972804" alt="Kurtis signature" class="sig reveal d5" loading="lazy">
-    </div>
-  </div>
-</section>
-
-<!-- ORDER -->
-<section class="order-section" id="order">
-  <div class="order-inner">
-    <div class="order-head">
-      <span class="stag reveal">Get Your Cookies</span>
-      <h2 class="sh2 reveal d1">Three ways to<br><em>get your fix.</em></h2>
-    </div>
-    <div class="order-grid">
-      <div class="order-card star reveal">
-        <div class="order-icon">🏪</div>
-        <div class="order-title">Saturday Farmer's Markets</div>
-        <p class="order-desc">The original Kurty's experience. Three Austin locations every Saturday. Show up, smell the cookies, grab a box.</p>
-        <ul class="order-list">
-          <li>SFC Republic Square (Downtown) — 9AM–1PM</li>
-          <li>SFC Sunset Valley (South) — 9AM–1PM</li>
-          <li>The Arboretum (North) — 10AM–2PM</li>
-        </ul>
-        <a href="https://kurtyscookies.com" target="_blank" rel="noopener" class="order-cta">Order for Pickup →</a>
-      </div>
-      <div class="order-card reveal d1">
-        <div class="order-icon">🚚</div>
-        <div class="order-title">Friday Delivery</div>
-        <p class="order-desc">Skip the market — we'll come to you. Austin-area delivery every Friday afternoon. Order in advance.</p>
-        <ul class="order-list">
-          <li>Austin area delivery</li>
-          <li>Every Friday, 12PM–4PM</li>
-          <li>Pre-order online at kurtyscookies.com</li>
-        </ul>
-        <a href="https://kurtyscookies.com" target="_blank" rel="noopener" class="order-cta">Order Delivery →</a>
-      </div>
-      <div class="order-card reveal d2">
-        <div class="order-icon">🎉</div>
-        <div class="order-title">Catering</div>
-        <p class="order-desc">Events, offices, weddings, parties. Large orders with the same obsessive quality. Zero shortcuts, even at scale.</p>
-        <ul class="order-list">
-          <li>Custom quantities available</li>
-          <li>Special requests welcome</li>
-          <li>Submit the form anytime</li>
-        </ul>
-        <a href="https://kurtyscookies.com/pages/catering" target="_blank" rel="noopener" class="order-cta ghost">Request Catering →</a>
+  <!-- SECTION 3: STORY -->
+  <div class="section-wrap" id="sw3">
+    <div class="scroll-section">
+      <div class="sect-overlay sect-overlay-story"></div>
+      <div class="sect-content story-layout">
+        <div class="story-text-col">
+          <div class="sect-tag sect-text">Our Story</div>
+          <h2 class="sect-h2 sect-text d1">By brothers.<br><em>For Austin.</em></h2>
+          <blockquote class="pullquote sect-text d2">"We knew our cookies were better than anything else in Austin. So we started a company."</blockquote>
+          <p style="font-size:clamp(.88rem,1.2vw,.98rem);color:rgba(255,255,255,.7);line-height:1.8;max-width:460px;text-shadow:0 1px 6px rgba(0,0,0,.4)" class="sect-text d3">Kurtis — Tesla engineer, serial baker. Eric — his twin. They wanted to build something together. Their chocolate chip cookie destroyed every chain in Austin, so they started selling at farmer's markets and never looked back.</p>
+          <img src="https://kurtyscookies.com/cdn/shop/files/sig_1.png?v=1705972804" alt="Kurtis signature" class="story-sig sect-text d4" loading="lazy">
+        </div>
+        <div class="story-img-col sect-text d2">
+          <div class="story-photo">
+            <img src="https://kurtyscookies.com/cdn/shop/files/kurt_n_eric.png?v=1784701969" alt="Kurtis and Eric, founders" loading="lazy">
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</section>
 
-<!-- CTA BANNER -->
-<section class="cta-banner">
-  <div class="cta-banner-inner">
-    <span class="stag reveal">This Saturday</span>
-    <h2 class="cta-h2 reveal d1">Your next <em>obsession</em><br>is one order away.</h2>
-    <p class="cta-p reveal d2">Available every Saturday at Austin farmer's markets, or Friday delivery. Vote monthly to bring back your favorite vaulted flavors.</p>
-    <div class="cta-row reveal d3">
-      <a href="https://kurtyscookies.com" target="_blank" rel="noopener" class="btn-red" style="padding:17px 40px;font-size:1rem">Order Now →</a>
-      <a href="#vault" class="btn-outline" style="padding:17px 36px;font-size:1rem">Vote in The Vault 🔥</a>
+  <!-- SECTION 4: THIS WEEK -->
+  <div class="section-wrap" id="sw4">
+    <div class="scroll-section">
+      <div class="sect-overlay sect-overlay-lineup"></div>
+      <div class="sect-content center">
+        <div class="sect-tag sect-text">Right Now</div>
+        <h2 class="sect-h2 sect-text d1">This Week's<br><em>Lineup.</em></h2>
+        <div class="lineup-mini" id="lineup-mini">
+          <!-- rendered by JS -->
+        </div>
+        <div class="sect-ctas center-ctas sect-text d3" style="margin-top:24px">
+          <a href="https://kurtyscookies.com" target="_blank" rel="noopener" class="btn-hero">Order Now →</a>
+          <a href="vault.html" class="btn-ghost-white">See All 35+ Flavors →</a>
+        </div>
+      </div>
     </div>
   </div>
-</section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-top">
-    <div>
-      <img src="https://kurtyscookies.com/cdn/shop/files/Horizontal_Logo_White_Header_140x.png?v=1735790614&width=600" alt="Kurty's Cookies" class="footer-logo-img">
-      <p class="footer-tagline">Handcrafted in Austin, TX by Kurtis &amp; Eric. Real ingredients. No shortcuts. Fucking amazing results — every time.</p>
-    </div>
-    <div>
-      <div class="fc-head">Order</div>
-      <ul class="fc-links">
-        <li><a href="https://kurtyscookies.com" target="_blank" rel="noopener">Market Pickup</a></li>
-        <li><a href="https://kurtyscookies.com" target="_blank" rel="noopener">Friday Delivery</a></li>
-        <li><a href="https://kurtyscookies.com/pages/catering" target="_blank" rel="noopener">Catering</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="fc-head">Locations</div>
-      <ul class="fc-links">
-        <li><a href="#">SFC Republic Square</a></li>
-        <li><a href="#">SFC Sunset Valley</a></li>
-        <li><a href="#">The Arboretum</a></li>
-      </ul>
+</div><!-- end #scroll-track -->
+
+<!-- SOLID SECTION -->
+<div class="solid-section">
+
+  <!-- VAULT TEASER -->
+  <div class="vault-teaser">
+    <div class="vt-inner">
+      <div class="vt-head">
+        <span class="vt-tag rev">The Vault · Vote Monthly</span>
+        <h2 class="vt-title rev r1">Every flavor we've ever baked.<br><em>Vote to bring them back.</em></h2>
+        <p class="vt-sub rev r2">Top 3 most-wanted vault flavors return every month. One vote per person.</p>
+        <a href="vault.html" class="vt-link rev r3">Enter The Vault → Vote Now 🔥</a>
+      </div>
+      <div class="vt-cards" id="vt-cards">
+        <!-- rendered by JS -->
+      </div>
     </div>
   </div>
-  <div class="footer-bottom">
-    <div class="footer-copy">© 2026 Kurty's Cookies · Austin, TX</div>
-    <div class="footer-heart">Made with <em>♥</em> (and way too much butter)</div>
-  </div>
-</footer>
 
-<!-- FLOATING CTA (mobile) -->
-<div class="float-cta"><a href="#order">Order Now →</a></div>
+  <!-- ORDER -->
+  <div class="order-section" id="order">
+    <div class="order-inner">
+      <span class="stag rev">Get Your Cookies</span>
+      <h2 class="sh2 rev r1">Three ways to <em>get your fix.</em></h2>
+      <div class="order-cards">
+        <div class="oc rev">
+          <div class="oc-icon">🏪</div>
+          <div class="oc-title">Saturday Farmer's Markets</div>
+          <p class="oc-desc">The original Kurty's experience — three Austin locations every Saturday.</p>
+          <ul class="oc-list">
+            <li>SFC Republic Square (Downtown) — 9AM–1PM</li>
+            <li>SFC Sunset Valley (South) — 9AM–1PM</li>
+            <li>The Arboretum (North) — 10AM–2PM</li>
+          </ul>
+          <a href="https://kurtyscookies.com" target="_blank" rel="noopener" class="oc-btn">Order for Pickup →</a>
+        </div>
+        <div class="oc rev r1">
+          <div class="oc-icon">🚚</div>
+          <div class="oc-title">Friday Delivery</div>
+          <p class="oc-desc">Skip the market — we come to you. Austin-area delivery every Friday.</p>
+          <ul class="oc-list">
+            <li>Austin area delivery</li>
+            <li>Every Friday, 12PM–4PM</li>
+            <li>Pre-order at kurtyscookies.com</li>
+          </ul>
+          <a href="https://kurtyscookies.com" target="_blank" rel="noopener" class="oc-btn">Order Delivery →</a>
+        </div>
+        <div class="oc rev r2">
+          <div class="oc-icon">🎉</div>
+          <div class="oc-title">Catering</div>
+          <p class="oc-desc">Events, offices, weddings, parties. Any size. Same obsessive quality.</p>
+          <ul class="oc-list">
+            <li>Custom quantities available</li>
+            <li>Special requests welcome</li>
+            <li>Submit form anytime</li>
+          </ul>
+          <a href="https://kurtyscookies.com/pages/catering" target="_blank" rel="noopener" class="oc-btn ghost">Request Catering →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <a href="index.html" class="footer-logo"><img src="https://kurtyscookies.com/cdn/shop/files/Horizontal_Logo_White_Header_140x.png?v=1735790614&width=600" alt="Kurty's Cookies"></a>
+      <div class="footer-copy">© 2026 Kurty's Cookies · Austin, TX</div>
+      <div class="footer-heart">Made with <em>♥</em> and way too much butter</div>
+    </div>
+  </footer>
+
+</div><!-- end .solid-section -->
 
 <script>
 // ===== SUPABASE =====
-const SUPA_URL = 'https://swcuzceplgzdarklzvcp.supabase.co'
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3Y3V6Y2VwbGd6ZGFya2x6dmNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4OTY3NTUsImV4cCI6MjEwNTQ3Mjc1NX0.kc8hq6b-Xr1zmjA4QQQczutJtG7eIWfLUGtB4p-GWKE'
-const sb = supabase.createClient(SUPA_URL, SUPA_KEY)
+const SUPA_URL='https://swcuzceplgzdarklzvcp.supabase.co'
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3Y3V6Y2VwbGd6ZGFya2x6dmNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4OTY3NTUsImV4cCI6MjEwNTQ3Mjc1NX0.kc8hq6b-Xr1zmjA4QQQczutJtG7eIWfLUGtB4p-GWKE'
+const sb=supabase.createClient(SUPA_URL,SUPA_KEY)
 
-// ===== SAFE STORAGE (handles sandboxed iframes / private mode) =====
-const _mem = {}
-function sGet(key) { try { return localStorage.getItem(key) } catch(e) { return _mem[key] ?? null } }
-function sSet(key, val) { try { localStorage.setItem(key, val) } catch(e) { _mem[key] = val } }
-function sGetJson(key, fb) { try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fb)) } catch(e) { return _mem[key] ?? fb } }
-
-// ===== STATE =====
-let allCookies = []
-let votedIds = sGetJson('kc_voted', [])
-
-// ===== FINGERPRINT =====
-function getFP() {
-  let fp = sGet('kc_fp')
-  if (!fp) { fp = crypto.randomUUID(); sSet('kc_fp', fp) }
-  return fp
+// ===== SCROLL VIDEO =====
+const video=document.getElementById('hero-video')
+const track=document.getElementById('scroll-track')
+let vidReady=false
+video.addEventListener('loadeddata',()=>{vidReady=true;video.pause()})
+video.addEventListener('canplay',()=>{vidReady=true;video.pause()})
+video.load()
+let raf=null
+function mapVideo(){
+  if(!vidReady||!video.duration)return
+  const scrolled=window.scrollY
+  const trackH=track.offsetHeight-window.innerHeight
+  if(trackH<=0)return
+  const progress=Math.min(Math.max(scrolled/trackH,0),1)
+  video.currentTime=progress*video.duration
 }
-
-// ===== CATEGORY → STYLE =====
-function cardClass(cats) {
-  if (!cats) return ''
-  if (cats.includes('chocolate')) return 'choc'
-  if (cats.includes('fruit')) return 'fruit'
-  if (cats.includes('deluxe') || cats.includes('nuts')) return 'gold'
-  if (cats.includes('gf-vegan') || cats.includes('seasonal')) return 'green'
-  return ''
-}
-
-// ===== RENDER COOKIE CARD (active section) =====
-function renderActiveCard(c, delay=0) {
-  const cc = cardClass(c.categories)
-  const avail = c.availability || ''
-  let badge = ''
-  if (avail.includes('Week') && !avail.includes('Month')) badge = `<div class="cookie-avail avail-week">${avail}</div>`
-  else if (avail.includes('Month')) badge = `<div class="cookie-avail avail-month">${avail}</div>`
-  return `
-  <div class="cookie-card ${cc} reveal" style="transition-delay:${delay}s" data-id="${c.id}">
-    <div class="cookie-img-wrap">
-      ${badge}
-      <img class="cookie-img" src="${c.image_url}" alt="${c.name}" loading="lazy">
-    </div>
-    <div class="cookie-body">
-      <div class="cookie-name">${c.name}</div>
-      <div class="cookie-desc">${c.description || ''}</div>
-      <a href="https://kurtyscookies.com/collections/cookies" target="_blank" rel="noopener" class="cookie-shop">Order Now <span>→</span></a>
-    </div>
-  </div>`
-}
-
-// ===== RENDER RETURNING CARD =====
-function renderReturningCard(c, delay=0) {
-  const cc = cardClass(c.categories)
-  return `
-  <div class="cookie-card ${cc} reveal" style="transition-delay:${delay}s">
-    <div class="cookie-img-wrap">
-      <div class="cookie-avail avail-return">✓ Returning</div>
-      <img class="cookie-img" src="${c.image_url}" alt="${c.name}" loading="lazy" style="width:160px;height:160px">
-    </div>
-    <div class="cookie-body">
-      <div class="cookie-name">${c.name}</div>
-      <div class="cookie-desc">${c.description || ''}</div>
-      <div style="font-size:.75rem;color:var(--muted);margin-top:4px">Fan-voted winner — back next month</div>
-    </div>
-  </div>`
-}
-
-// ===== RENDER VAULT CARD =====
-function renderVaultCard(c, rank, delay=0) {
-  const isTop3 = rank <= 3
-  const voted = votedIds.includes(c.id)
-  const ineligible = c.status === 'ineligible'
-  const voteBtnClass = ineligible ? 'vote-btn ineligible' : voted ? 'vote-btn voted' : 'vote-btn'
-  const voteBtnLabel = ineligible ? 'Not Eligible' : voted ? '✓ Voted' : `🔥 Vote`
-  return `
-  <div class="vault-card ${isTop3 ? 'top3' : ''} reveal" style="transition-delay:${delay}s" data-id="${c.id}">
-    ${isTop3 ? '<div class="vault-coming-back">COMING BACK</div>' : ''}
-    <div class="vault-rank">#${rank} Most Wanted</div>
-    <img class="vault-img" src="${c.image_url}" alt="${c.name}" loading="lazy">
-    <div class="vault-name">${c.name}</div>
-    <div class="vault-vote-row">
-      <div class="vote-count">
-        <span id="vc-${c.id}">${c.vote_count}</span>
-        <span style="font-size:.7rem;color:var(--dim)">vote${c.vote_count !== 1 ? 's' : ''}</span>
-      </div>
-      <button class="${voteBtnClass}" data-cookie-id="${c.id}" ${ineligible || voted ? 'disabled' : ''} onclick="handleVote(this,'${c.id}')">
-        <span class="fire-icon">${voted ? '' : ineligible ? '🔒' : '🔥'}</span>
-        ${voteBtnLabel}
-      </button>
-    </div>
-  </div>`
-}
-
-// ===== RENDER FLAVOR CARD =====
-function renderFlavorCard(c, delay=0) {
-  const badgeMap = {active:'badge-active',returning:'badge-returning',vault:'badge-vault',ineligible:'badge-ineligible'}
-  const labelMap = {active:c.availability||'Active',returning:'Returning',vault:'Vault',ineligible:'Archive'}
-  const cc = cardClass(c.categories)
-  return `
-  <div class="flavor-card ${cc} reveal" style="transition-delay:${delay}s" data-cats="${(c.categories||[]).join(',')}">
-    <img class="flavor-img" src="${c.image_url}" alt="${c.name}" loading="lazy">
-    <div class="flavor-name">${c.name}</div>
-    <span class="flavor-status-badge ${badgeMap[c.status]||'badge-vault'}">${labelMap[c.status]||c.status}</span>
-  </div>`
-}
-
-// ===== HANDLE VOTE =====
-async function handleVote(btn, cookieId) {
-  if (btn.disabled || btn.classList.contains('voted') || btn.classList.contains('ineligible')) return
-  btn.disabled = true
-  btn.style.opacity = '.6'
-  // Burst particles
-  spawnBurst(btn)
-  try {
-    const fp = getFP()
-    const {data, error} = await sb.rpc('cast_vote', {p_cookie_id: cookieId, p_voter_fingerprint: fp})
-    if (error) throw error
-    if (data === true) {
-      // Success
-      votedIds.push(cookieId)
-      localStorage.setItem('kc_voted', JSON.stringify(votedIds))
-      btn.className = 'vote-btn voted'
-      btn.innerHTML = '<span class="fire-icon"></span>✓ Voted'
-      btn.disabled = true
-      // Update count locally (realtime will confirm)
-      const countEl = document.getElementById(`vc-${cookieId}`)
-      if (countEl) {
-        const prev = parseInt(countEl.textContent) || 0
-        animateCount(countEl, prev, prev+1)
-      }
-    } else {
-      // Already voted
-      btn.className = 'vote-btn voted'
-      btn.innerHTML = '<span class="fire-icon"></span>✓ Voted'
-      btn.disabled = true
-      if (!votedIds.includes(cookieId)) {
-        votedIds.push(cookieId)
-        localStorage.setItem('kc_voted', JSON.stringify(votedIds))
-      }
-    }
-  } catch(e) {
-    console.error('Vote error:', e)
-    btn.disabled = false
-    btn.style.opacity = '1'
-  }
-}
-
-// ===== ANIMATE COUNT =====
-function animateCount(el, from, to) {
-  const dur = 600, steps = 20, step = (to - from) / steps
-  let cur = from, i = 0
-  const t = setInterval(() => {
-    cur += step; i++
-    el.textContent = Math.round(cur)
-    el.style.transform = `scale(${1 + 0.15 * Math.sin(i/steps*Math.PI)})`
-    if (i >= steps) {
-      el.textContent = to
-      el.style.transform = 'scale(1)'
-      clearInterval(t)
-    }
-  }, dur / steps)
-}
-
-// ===== BURST PARTICLES =====
-function spawnBurst(el) {
-  const rect = el.getBoundingClientRect()
-  const cx = rect.left + rect.width / 2
-  const cy = rect.top + rect.height / 2
-  const emojis = ['🔥','✨','🍪','💫','⭐']
-  for (let i = 0; i < 8; i++) {
-    const p = document.createElement('div')
-    p.className = 'burst-particle'
-    p.textContent = emojis[i % emojis.length]
-    const angle = (i / 8) * 360
-    const dist = 60 + Math.random() * 40
-    p.style.cssText = `position:fixed;left:${cx}px;top:${cy}px;z-index:9999;--tx:${Math.cos(angle*Math.PI/180)*dist}px;--ty:${Math.sin(angle*Math.PI/180)*dist}px;`
-    document.body.appendChild(p)
-    setTimeout(() => p.remove(), 900)
-  }
-}
-
-// ===== COUNTDOWN =====
-function getDeadline() {
-  const now = new Date()
-  const d = new Date(now.getFullYear(), now.getMonth(), 25, 21, 0, 0)
-  if (now >= d) d.setMonth(d.getMonth() + 1)
-  return d
-}
-function pad(n) { return String(n).padStart(2,'0') }
-function updateCountdown() {
-  const diff = getDeadline() - Date.now()
-  if (diff <= 0) { document.getElementById('cd-d').textContent='00'; document.getElementById('cd-h').textContent='00'; document.getElementById('cd-m').textContent='00'; document.getElementById('cd-s').textContent='00'; return }
-  const days = Math.floor(diff / 86400000)
-  const hrs = Math.floor((diff % 86400000) / 3600000)
-  const mins = Math.floor((diff % 3600000) / 60000)
-  const secs = Math.floor((diff % 60000) / 1000)
-  document.getElementById('cd-d').textContent = pad(days)
-  document.getElementById('cd-h').textContent = pad(hrs)
-  document.getElementById('cd-m').textContent = pad(mins)
-  document.getElementById('cd-s').textContent = pad(secs)
-}
-setInterval(updateCountdown, 1000)
-updateCountdown()
-
-// ===== LOAD DATA FROM SUPABASE =====
-async function init() {
-  const {data, error} = await sb.from('cookies').select('*').order('vote_count', {ascending:false})
-  if (error) { console.error(error); hideLoading(); return }
-  allCookies = data || []
-
-  const active = allCookies.filter(c => c.status === 'active')
-  const returning = allCookies.filter(c => c.status === 'returning')
-  const vault = allCookies.filter(c => c.status === 'vault' || c.status === 'ineligible').sort((a,b) => b.vote_count - a.vote_count)
-
-  // Render active lineup
-  const ag = document.getElementById('active-grid')
-  ag.innerHTML = active.map((c,i) => renderActiveCard(c, i*.08)).join('')
-
-  // Render returning
-  const rg = document.getElementById('returning-grid')
-  if (returning.length) {
-    rg.innerHTML = returning.map((c,i) => renderReturningCard(c, i*.1)).join('')
-    document.getElementById('returning').style.display = ''
-  } else {
-    document.getElementById('returning').style.display = 'none'
-  }
-
-  // Render vault (most wanted first)
-  const vg = document.getElementById('vault-grid')
-  vg.innerHTML = vault.map((c,i) => renderVaultCard(c, i+1, Math.min(i*.04,.3))).join('')
-
-  // Render all flavors
-  renderFlavors('all')
-
-  // Re-observe new elements
-  document.querySelectorAll('.reveal,.reveal-left,.reveal-scale').forEach(el => revealObs.observe(el))
-
-  hideLoading()
-  setupRealtime()
-}
-
-// ===== RENDER ALL FLAVORS =====
-function renderFlavors(cat) {
-  const filtered = cat === 'all' ? allCookies : allCookies.filter(c => (c.categories||[]).includes(cat))
-  const fg = document.getElementById('flavors-grid')
-  fg.innerHTML = filtered.map((c,i) => renderFlavorCard(c, Math.min(i*.02,.3))).join('')
-  document.querySelectorAll('#flavors-grid .reveal').forEach(el => revealObs.observe(el))
-}
-
-// ===== FILTER TABS =====
-document.getElementById('filter-tabs').addEventListener('click', e => {
-  const btn = e.target.closest('.filter-tab')
-  if (!btn) return
-  document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'))
-  btn.classList.add('active')
-  renderFlavors(btn.dataset.cat)
-})
-
-// ===== SUPABASE REALTIME =====
-function setupRealtime() {
-  sb.channel('cookie-votes')
-    .on('postgres_changes', {event:'UPDATE', schema:'public', table:'cookies'}, payload => {
-      const {id, vote_count} = payload.new
-      const el = document.getElementById(`vc-${id}`)
-      if (el) {
-        const prev = parseInt(el.textContent) || 0
-        if (vote_count !== prev) animateCount(el, prev, vote_count)
-      }
-    })
-    .subscribe()
-}
-
-// ===== SCROLL REVEAL =====
-const revealObs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target) } })
-}, {threshold:.08, rootMargin:'0px 0px -40px 0px'})
-document.querySelectorAll('.reveal,.reveal-left,.reveal-scale').forEach(el => revealObs.observe(el))
+window.addEventListener('scroll',()=>{if(raf)cancelAnimationFrame(raf);raf=requestAnimationFrame(mapVideo)},{passive:true})
 
 // ===== NAV SCROLL =====
-const nav = document.getElementById('nav')
-window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60), {passive:true})
+const nav=document.getElementById('nav')
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>80),{passive:true})
+
+// ===== SECTION ANIMATION (IntersectionObserver on section-wraps) =====
+const sectionObs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    e.target.classList.toggle('active',e.isIntersecting)
+  })
+},{threshold:0.3})
+document.querySelectorAll('.section-wrap').forEach(el=>sectionObs.observe(el))
+
+// ===== REVEAL for solid sections =====
+const revObs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');revObs.unobserve(e.target)}})},{threshold:.1,rootMargin:'0px 0px -40px 0px'})
+document.querySelectorAll('.rev').forEach(el=>revObs.observe(el))
+
+// ===== LOAD DATA =====
+async function init(){
+  const{data}=await sb.from('cookies').select('id,name,image_url,status,availability,vote_count,hof_rank,categories').order('vote_count',{ascending:false})
+  if(!data)return
+  // Active lineup (section 4)
+  const active=data.filter(c=>c.status==='active')
+  const miniGrid=document.getElementById('lineup-mini')
+  if(miniGrid){
+    miniGrid.innerHTML=active.slice(0,4).map((c,i)=>`<div class="lineup-card sect-text d${Math.min(i+2,4)}" style="transition-delay:${.2+i*.08}s"><img class="lineup-mini-img" src="${c.image_url}" alt="${c.name}" loading="lazy"><div class="lineup-mini-name">${c.name}</div><div class="lineup-mini-avail">${c.availability||'Active'}</div></div>`).join('')
+  }
+  // Vault teaser (top 3)
+  const vault=data.filter(c=>c.status==='vault'||c.status==='ineligible').slice(0,3)
+  const vtCards=document.getElementById('vt-cards')
+  if(vtCards){
+    vtCards.innerHTML=vault.map((c,i)=>`<div class="vt-card ${i===0?'top1':''} rev" style="transition-delay:${i*.08}s"><div class="vt-rank">#${i+1} Most Wanted</div><img class="vt-img" src="${c.image_url}" alt="${c.name}" loading="lazy"><div class="vt-name">${c.name}</div><div class="vt-votes">${c.vote_count} vote${c.vote_count!==1?'s':''}</div>${i<3?'<div class="vt-coming">COMING BACK</div>':''}</div>`).join('')
+    document.querySelectorAll('.vt-cards .rev').forEach(el=>revObs.observe(el))
+  }
+  // Re-observe lineup items after render
+  document.querySelectorAll('.lineup-card').forEach(el=>sectionObs.observe(el))
+}
+init()
 
 // ===== MOBILE MENU =====
-const ham = document.getElementById('ham'), mob = document.getElementById('mobMenu')
-let mopen = false
-ham.addEventListener('click', () => { mopen=!mopen; mob.classList.toggle('open',mopen) })
-function closeMob() { mopen=false; mob.classList.remove('open') }
+const ham=document.getElementById('ham'),mob=document.getElementById('mobMenu')
+let mo=false
+ham.addEventListener('click',()=>{mo=!mo;mob.classList.toggle('open',mo)})
+function closeMob(){mo=false;mob.classList.remove('open')}
 
 // ===== SMOOTH ANCHOR =====
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const t = document.querySelector(a.getAttribute('href'))
-    if (t) { e.preventDefault(); t.scrollIntoView({behavior:'smooth',block:'start'}) }
-  })
-})
-
-// ===== HIDE FLOAT CTA NEAR ORDER =====
-const orderSec = document.getElementById('order')
-const floatCta = document.querySelector('.float-cta')
-if (orderSec && floatCta) {
-  const fo = new IntersectionObserver(entries => {
-    floatCta.style.opacity = entries[0].isIntersecting ? '0' : '1'
-    floatCta.style.pointerEvents = entries[0].isIntersecting ? 'none' : 'auto'
-  }, {threshold:.2})
-  fo.observe(orderSec)
-}
-
-// ===== LOADING =====
-function hideLoading() {
-  const l = document.getElementById('loading')
-  if (l) { l.classList.add('done'); setTimeout(() => l.remove(), 600) }
-}
-
-// ===== START =====
-init()
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}})})
 </script>
 </body>
 </html>
