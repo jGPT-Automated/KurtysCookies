@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kurty's Cookies — Austin, TX</title>
+<meta name="description" content="Obsessively crafted cookies. Real ingredients, zero shortcuts. Available every Saturday at Austin farmer's markets.">
+<link rel="icon" href="https://kurtyscookies.com/cdn/shop/files/Small_Logo_Red_32x32.png?v=1735852532">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --bg:#0c0806;--surface:#161009;--surface-2:#1e160c;--border:#2c1e10;
+  --accent:#C8890F;--accent-dim:rgba(200,137,15,.1);--accent-glow:rgba(200,137,15,.22);
+  --text:#F4ECD8;--muted:#9A8B75;--dim:#5a4e3e;
+  --ease:cubic-bezier(0.16,1,0.3,1);--ease-spring:cubic-bezier(0.34,1.56,0.64,1);
+}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+
+/* WORD REVEAL — premium stagger animation */
+.split-word{display:inline-block;overflow:hidden;vertical-align:top}
+.split-word span{display:inline-block;transform:translateY(105%);transition:transform .9s var(--ease) calc(var(--wi,.1s))}
+.section-wrap.active .split-word span{transform:translateY(0)}
+.fade-up{opacity:0;transform:translateY(24px);transition:opacity .85s var(--ease),transform .85s var(--ease)}
+.fade-up.d1{transition-delay:.15s}.fade-up.d2{transition-delay:.28s}.fade-up.d3{transition-delay:.42s}
+.section-wrap.active .fade-up{opacity:1;transform:none}
+.rev{opacity:0;transform:translateY(18px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.rev.in{opacity:1;transform:none}
+.r1{transition-delay:.08s}.r2{transition-delay:.16s}.r3{transition-delay:.24s}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 clamp(16px,5vw,56px);display:flex;align-items:center;justify-content:space-between;transition:background .5s ease,border-color .5s ease;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(12,8,6,.93);backdrop-filter:blur(20px);border-bottom-color:var(--border)}
+.nav-logo img{height:24px;width:auto;filter:brightness(.9) sepia(.2)}
+.nav-links{display:flex;align-items:center;gap:28px;list-style:none}
+.nav-links a{font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:rgba(244,236,216,.55);transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.nav-links a.active{color:var(--accent)}
+.nav-links .variants-label{font-size:.65rem;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-right:-10px}
+.btn-nav{display:inline-flex;align-items:center;gap:7px;padding:8px 20px;border-radius:2px;font-size:.72rem;font-weight:500;letter-spacing:.08em;border:1px solid var(--accent);color:var(--accent);transition:all .2s}
+.btn-nav:hover{background:var(--accent);color:var(--bg)}
+.ham{display:none;flex-direction:column;gap:5px;padding:8px}
+.ham span{display:block;width:22px;height:1.5px;background:var(--text);border-radius:1px}
+.mob-menu{display:none;position:fixed;top:60px;left:0;right:0;z-index:190;background:rgba(12,8,6,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-direction:column}
+.mob-menu.open{display:flex}
+.mob-menu a{font-size:.9rem;font-weight:400;color:var(--muted);padding:16px clamp(16px,5vw,40px);border-bottom:1px solid var(--border);letter-spacing:.06em;transition:color .2s}
+.mob-menu a:hover{color:var(--text)}
+
+/* VIDEO LAYER */
+.video-layer{position:fixed;inset:0;z-index:0;overflow:hidden}
+.video-layer video{width:100%;height:100%;object-fit:cover;filter:saturate(1.25) sepia(0.18) brightness(0.9)}
+.video-base-dim{position:absolute;inset:0;background:rgba(12,8,6,.38)}
+
+/* SCROLL TRACK */
+#scroll-track{position:relative;z-index:1}
+.section-wrap{height:100vh}
+.scroll-section{position:sticky;top:0;height:100vh;width:100%;overflow:hidden;pointer-events:auto}
+
+/* SOLID SECTION */
+.solid-section{position:relative;z-index:1;background:var(--bg)}
+
+/* ===== SECTION 1: HERO ===== */
+/* Radial gradient anchored to where text lives (bottom-left) — research-backed technique */
+.hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse 75% 55% at 15% 90%,rgba(12,8,6,.88) 0%,rgba(12,8,6,0) 100%),linear-gradient(180deg,rgba(12,8,6,.3) 0%,rgba(12,8,6,0) 35%,rgba(12,8,6,.96) 100%)}
+.hero-content{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:0 clamp(24px,8vw,120px) clamp(48px,8vh,80px)}
+.hero-eyebrow{font-family:'DM Sans',sans-serif;font-size:.7rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .6s ease}
+.section-wrap.active .hero-eyebrow{opacity:1;transform:none}
+.hero-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(4rem,10vw,11rem);font-weight:700;line-height:.92;letter-spacing:-.02em;color:var(--text);margin-bottom:28px}
+.hero-h1 em{font-style:italic;color:var(--accent)}
+.hero-sub{font-family:'DM Sans',sans-serif;font-size:clamp(.88rem,1.2vw,1rem);color:rgba(244,236,216,.65);max-width:440px;line-height:1.8;margin-bottom:36px;font-weight:300}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+.btn-primary{display:inline-flex;align-items:center;gap:10px;padding:14px 34px;font-size:.82rem;font-weight:500;letter-spacing:.08em;background:var(--accent);color:var(--bg);border-radius:2px;transition:background .2s,transform .2s var(--ease-spring)}
+.btn-primary:hover{background:#D9980F;transform:translateY(-1px)}
+.btn-outline{display:inline-flex;align-items:center;gap:10px;padding:14px 30px;font-size:.82rem;font-weight:400;letter-spacing:.08em;border:1px solid rgba(244,236,216,.3);color:rgba(244,236,216,.75);border-radius:2px;transition:border-color .2s,color .2s}
+.btn-outline:hover{border-color:rgba(244,236,216,.65);color:var(--text)}
+.scroll-cue{position:absolute;bottom:28px;right:clamp(24px,5vw,56px);display:flex;align-items:center;gap:10px;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(244,236,216,.35);opacity:0;transition:opacity .6s ease .8s}
+.section-wrap.active .scroll-cue{opacity:1}
+.scroll-line{width:40px;height:1px;background:rgba(244,236,216,.3);transform-origin:left;animation:scrollLine 2.2s ease-in-out infinite}
+@keyframes scrollLine{0%,100%{transform:scaleX(0);opacity:0}40%{transform:scaleX(1);opacity:1}60%{transform:scaleX(1);opacity:1}100%{transform:scaleX(0);opacity:0}}
+
+/* ===== SECTION 2: PROCESS ===== */
+.process-overlay{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 12% 90%,rgba(12,8,6,.9) 0%,rgba(12,8,6,0) 100%),linear-gradient(180deg,rgba(12,8,6,.35) 0%,rgba(12,8,6,0) 30%,rgba(12,8,6,.96) 100%)}
+.process-content{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:0 clamp(24px,8vw,120px) clamp(48px,8vh,80px)}
+.process-label{font-size:.68rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.process-h2{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,7vw,8.5rem);font-weight:600;line-height:.96;letter-spacing:-.01em;color:var(--text);margin-bottom:36px}
+.process-h2 em{font-style:italic;font-weight:400}
+.ingredient-list{display:flex;flex-direction:column;gap:12px;border-left:1px solid rgba(200,137,15,.4);padding-left:24px}
+.ingredient{font-family:'DM Sans',sans-serif;font-size:clamp(.88rem,1.3vw,1.05rem);font-weight:300;color:rgba(244,236,216,.72);letter-spacing:.03em;line-height:1.5}
+.ingredient strong{color:var(--text);font-weight:500}
+
+/* ===== SECTION 3: STORY ===== */
+.story-overlay{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 10% 88%,rgba(12,8,6,.92) 0%,rgba(12,8,6,0) 100%),linear-gradient(180deg,rgba(12,8,6,.25) 0%,rgba(12,8,6,0) 28%,rgba(12,8,6,.96) 100%)}
+.story-content{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;padding:0 clamp(24px,8vw,120px) clamp(48px,8vh,80px);max-width:860px}
+.story-quote{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4.5vw,5rem);font-weight:400;font-style:italic;line-height:1.2;color:var(--text);margin-bottom:24px;text-shadow:0 2px 24px rgba(0,0,0,.5)}
+.story-attr{font-size:.75rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+
+/* ===== SOLID SECTION ===== */
+/* Vault teaser */
+.vault-teaser{padding:clamp(64px,9vw,100px) clamp(20px,6vw,80px);border-bottom:1px solid var(--border);position:relative}
+.vault-teaser::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent)}
+.vt-inner{max-width:1100px;margin:0 auto}
+.vt-head{text-align:center;margin-bottom:clamp(32px,4vw,52px)}
+.vt-label{font-size:.66rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;display:block}
+.vt-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,4.5rem);font-weight:600;letter-spacing:-.01em;line-height:1.05;margin-bottom:14px}
+.vt-title em{font-style:italic;font-weight:400}
+.vt-sub{font-size:.88rem;color:var(--muted);font-weight:300;max-width:420px;margin:0 auto 28px;line-height:1.75}
+.vt-btn{display:inline-flex;align-items:center;gap:9px;padding:12px 28px;font-size:.78rem;font-weight:500;letter-spacing:.08em;border:1px solid var(--accent);color:var(--accent);border-radius:2px;transition:all .2s}
+.vt-btn:hover{background:var(--accent);color:var(--bg)}
+.vt-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:clamp(28px,4vw,48px)}
+.vt-card{background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:12px;transition:border-color .3s,transform .3s var(--ease)}
+.vt-card:hover{transform:translateY(-3px);border-color:var(--accent)}
+.vt-rank{font-size:.6rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.vt-img{width:90px;height:90px;object-fit:contain;filter:drop-shadow(0 8px 20px rgba(0,0,0,.5))}
+.vt-name{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;color:var(--text);text-align:center;letter-spacing:.01em}
+.vt-votes{font-size:.72rem;color:var(--muted);font-weight:300}
+.vt-badge{font-size:.58rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(200,137,15,.35);padding:3px 10px;border-radius:2px}
+
+/* Order */
+.order-sec{padding:clamp(56px,8vw,96px) clamp(20px,6vw,80px);border-bottom:1px solid var(--border)}
+.order-inner{max-width:1100px;margin:0 auto}
+.sec-label{font-size:.66rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;display:block}
+.sec-h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4.5vw,4rem);font-weight:600;letter-spacing:-.01em;line-height:1.05;margin-bottom:0}
+.sec-h2 em{font-style:italic;font-weight:400}
+.order-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:clamp(28px,4vw,48px)}
+.oc{background:var(--surface);border:1px solid var(--border);padding:clamp(20px,3vw,28px);display:flex;flex-direction:column;gap:12px;transition:border-color .3s}
+.oc:hover{border-color:var(--accent)}
+.oc-icon{font-size:1.2rem;filter:grayscale(1) sepia(.8);opacity:.7}
+.oc-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;letter-spacing:.01em}
+.oc-desc{font-size:.8rem;color:var(--muted);font-weight:300;line-height:1.75;flex:1}
+.oc-detail{list-style:none;display:flex;flex-direction:column;gap:6px}
+.oc-detail li{font-size:.75rem;color:var(--muted);font-weight:300;display:flex;gap:8px}
+.oc-detail li::before{content:'—';color:var(--accent);flex-shrink:0}
+.oc-cta{display:inline-flex;align-items:center;gap:8px;padding:10px 0;font-size:.75rem;font-weight:500;letter-spacing:.08em;color:var(--accent);border-bottom:1px solid rgba(200,137,15,.4);margin-top:4px;transition:border-color .2s}
+.oc-cta:hover{border-color:var(--accent)}
+
+/* Footer */
+footer{padding:clamp(32px,5vw,52px) clamp(20px,6vw,80px) 28px;border-top:1px solid var(--border)}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-logo img{height:20px;opacity:.6;filter:sepia(.3)}
+.footer-copy,.footer-heart{font-size:.72rem;color:var(--dim);font-weight:300}
+.footer-heart em{font-style:normal;color:var(--accent)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .nav-links{display:none}
+  nav .btn-nav{display:none}
+  .ham{display:flex}
+  .vt-cards,.order-grid{grid-template-columns:1fr}
+  .footer-inner{flex-direction:column;text-align:center}
+}
+@media(max-width:640px){
+  .hero-ctas{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- VIDEO -->
+<div class="video-layer">
+  <video id="hero-video" muted playsinline preload="auto" src="https://pub.hyperagent.com/api/published/pbf01M31RKZBZ_1ZFMDR6R18WXPR3H/08552c2d-bc9f-4ecb-a849-55aec51df668.mp4"></video>
+  <div class="video-base-dim"></div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="nav-logo"><img src="https://kurtyscookies.com/cdn/shop/files/Horizontal_Logo_White_Header_140x.png?v=1735790614&width=600" alt="Kurty's Cookies" height="24"></a>
+  <ul class="nav-links">
+    <li><span class="variants-label">Variant →</span></li>
+    <li><a href="index.html">Cinema</a></li>
+    <li><a href="craft.html" class="active">Craft</a></li>
+    <li><a href="minimal.html">Bold</a></li>
+    <li style="width:1px;height:18px;background:var(--border);margin:0 4px"></li>
+    <li><a href="vault.html">The Vault</a></li>
+    <li><a href="https://kurtyscookies.com/pages/catering" target="_blank" rel="noopener">Catering</a></li>
+  </ul>
+  <a href="vault.html" class="btn-nav">Vote 🔥</a>
+  <button class="ham" id="ham"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="index.html" onclick="closeMob()">← Cinema</a>
+  <a href="minimal.html" onclick="closeMob()">Bold →</a>
+  <a href="vault.html" onclick="closeMob()">The Vault</a>
+  <a href="#order" onclick="closeMob()">Order</a>
+</div>
+
+<!-- SCROLL TRACK -->
+<div id="scroll-track">
+
+  <!-- SECTION 1: HERO -->
+  <div class="section-wrap" id="sw1">
+    <div class="scroll-section">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-eyebrow">Austin, Texas · Est. 2024</div>
+        <h1 class="hero-h1">
+          <div class="split-word" style="--wi:0s"><span>Obsessively</span></div>&nbsp;<div class="split-word" style="--wi:.07s"><span><em>crafted.</em></span></div>
+        </h1>
+        <p class="hero-sub fade-up d1">Real ingredients. Zero shortcuts.<br>Available every Saturday at Austin farmer's markets.</p>
+        <div class="hero-ctas fade-up d2">
+          <a href="#order" class="btn-primary">Order Now</a>
+          <a href="vault.html" class="btn-outline">Vote in The Vault →</a>
+        </div>
+      </div>
+      <div class="scroll-cue"><div class="scroll-line"></div> Scroll</div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: PROCESS -->
+  <div class="section-wrap" id="sw2">
+    <div class="scroll-section">
+      <div class="process-overlay"></div>
+      <div class="process-content">
+        <div class="process-label fade-up">The difference</div>
+        <h2 class="process-h2">
+          <div class="split-word" style="--wi:0s"><span>Zero</span></div>&nbsp;<div class="split-word" style="--wi:.06s"><span>shortcuts.</span></div><br>
+          <div class="split-word" style="--wi:.12s"><span><em>Every</em></span></div>&nbsp;<div class="split-word" style="--wi:.18s"><span><em>time.</em></span></div>
+        </h2>
+        <div class="ingredient-list">
+          <div class="ingredient fade-up d1"><strong>Real butter. Real eggs.</strong> Organic flour — always.</div>
+          <div class="ingredient fade-up d2"><strong>Dough chilled 1–3 days</strong> before baking. Patience is an ingredient.</div>
+          <div class="ingredient fade-up d3"><strong>No preservatives.</strong> No artificial flavors. No exceptions.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: STORY -->
+  <div class="section-wrap" id="sw3">
+    <div class="scroll-section">
+      <div class="story-overlay"></div>
+      <div class="story-content">
+        <blockquote class="story-quote">
+          <div class="split-word" style="--wi:0s"><span>"We</span></div>&nbsp;<div class="split-word" style="--wi:.04s"><span>decided</span></div>&nbsp;<div class="split-word" style="--wi:.08s"><span>Austin</span></div>&nbsp;<div class="split-word" style="--wi:.12s"><span>deserved</span></div>&nbsp;<div class="split-word" style="--wi:.16s"><span>better."</span></div>
+        </blockquote>
+        <div class="story-attr fade-up d2">— Kurtis & Eric, founders</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end scroll-track -->
+
+<!-- SOLID SECTION -->
+<div class="solid-section">
+
+  <!-- VAULT TEASER -->
+  <div class="vault-teaser" id="vault-teaser">
+    <div class="vt-inner">
+      <div class="vt-head">
+        <span class="vt-label rev">The Vault · Vote Monthly</span>
+        <h2 class="vt-title rev r1">Every flavor we've ever baked.<br><em>Vote to bring them back.</em></h2>
+        <p class="vt-sub rev r2">Top 3 most-wanted return every month. One vote per person.</p>
+        <a href="vault.html" class="vt-btn rev r3">Enter The Vault →</a>
+      </div>
+      <div class="vt-cards" id="vt-cards"></div>
+    </div>
+  </div>
+
+  <!-- ORDER -->
+  <div class="order-sec" id="order">
+    <div class="order-inner">
+      <span class="sec-label rev">Get Your Cookies</span>
+      <h2 class="sec-h2 rev r1">Three ways to <em>get your fix.</em></h2>
+      <div class="order-grid">
+        <div class="oc rev">
+          <div class="oc-icon">🏪</div>
+          <div class="oc-title">Saturday Markets</div>
+          <p class="oc-desc">The original Kurty's experience. Three Austin locations, every Saturday.</p>
+          <ul class="oc-detail">
+            <li>SFC Republic Square · Downtown · 9AM–1PM</li>
+            <li>SFC Sunset Valley · South · 9AM–1PM</li>
+            <li>The Arboretum · North · 10AM–2PM</li>
+          </ul>
+          <a href="https://kurtyscookies.com" target="_blank" rel="noopener" class="oc-cta">Pre-order for pickup →</a>
+        </div>
+        <div class="oc rev r1">
+          <div class="oc-icon">🚚</div>
+          <div class="oc-title">Friday Delivery</div>
+          <p class="oc-desc">Austin-area delivery every Friday. Order in advance.</p>
+          <ul class="oc-detail">
+            <li>Every Friday · 12PM–4PM</li>
+            <li>Austin area only</li>
+          </ul>
+          <a href="https://kurtyscookies.com" target="_blank" rel="noopener" class="oc-cta">Order delivery →</a>
+        </div>
+        <div class="oc rev r2">
+          <div class="oc-icon">🎉</div>
+          <div class="oc-title">Catering</div>
+          <p class="oc-desc">Events, offices, weddings. Any size — same obsessive quality.</p>
+          <ul class="oc-detail">
+            <li>Custom quantities available</li>
+            <li>Special requests welcome</li>
+          </ul>
+          <a href="https://kurtyscookies.com/pages/catering" target="_blank" rel="noopener" class="oc-cta">Request catering →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <a href="index.html"><img src="https://kurtyscookies.com/cdn/shop/files/Horizontal_Logo_White_Header_140x.png?v=1735790614&width=600" alt="Kurty's Cookies" height="20"></a>
+      <div class="footer-copy">© 2026 Kurty's Cookies · Austin, TX</div>
+      <div class="footer-heart">Made with <em>♥</em> and too much butter</div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+const SUPA_URL='https://swcuzceplgzdarklzvcp.supabase.co'
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3Y3V6Y2VwbGd6ZGFya2x6dmNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4OTY3NTUsImV4cCI6MjEwNTQ3Mjc1NX0.kc8hq6b-Xr1zmjA4QQQczutJtG7eIWfLUGtB4p-GWKE'
+const sb=supabase.createClient(SUPA_URL,SUPA_KEY)
+
+// ─── VIDEO SCROLL MAP ───
+const vid=document.getElementById('hero-video')
+const track=document.getElementById('scroll-track')
+let rdy=false
+vid.addEventListener('loadeddata',()=>{rdy=true;vid.pause()})
+vid.addEventListener('canplay',()=>{rdy=true;vid.pause()})
+vid.load()
+let raf=null
+function mapVideo(){
+  if(!rdy||!vid.duration)return
+  const p=Math.min(Math.max(window.scrollY/(track.offsetHeight-window.innerHeight),0),1)
+  vid.currentTime=p*vid.duration
+}
+window.addEventListener('scroll',()=>{if(raf)cancelAnimationFrame(raf);raf=requestAnimationFrame(mapVideo)},{passive:true})
+
+// ─── SECTION REVEAL ───
+const secObs=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('active',e.isIntersecting)),{threshold:.25})
+document.querySelectorAll('.section-wrap').forEach(el=>secObs.observe(el))
+const revObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');revObs.unobserve(e.target)}}),{threshold:.1,rootMargin:'0px 0px -40px 0px'})
+document.querySelectorAll('.rev').forEach(el=>revObs.observe(el))
+
+// ─── NAV ───
+const nav=document.getElementById('nav')
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>60),{passive:true})
+const ham=document.getElementById('ham'),mob=document.getElementById('mobMenu')
+let mo=false;ham.addEventListener('click',()=>{mo=!mo;mob.classList.toggle('open',mo)})
+function closeMob(){mo=false;mob.classList.remove('open')}
+
+// ─── DATA ───
+async function init(){
+  const{data}=await sb.from('cookies').select('id,name,image_url,vote_count').eq('status','vault').order('vote_count',{ascending:false}).limit(3)
+  if(!data)return
+  document.getElementById('vt-cards').innerHTML=data.map((c,i)=>`
+    <div class="vt-card rev" style="transition-delay:${i*.08}s">
+      <div class="vt-rank">#${i+1} most wanted</div>
+      <img class="vt-img" src="${c.image_url}" alt="${c.name}" loading="lazy">
+      <div class="vt-name">${c.name}</div>
+      <div class="vt-votes">${c.vote_count} vote${c.vote_count!==1?'s':''}</div>
+      <div class="vt-badge">Coming back</div>
+    </div>`).join('')
+  document.querySelectorAll('.vt-cards .rev').forEach(el=>revObs.observe(el))
+}
+init()
+
+// ─── LENIS ───
+if(typeof Lenis!=='undefined'){
+  const lenis=new Lenis({duration:1.5,smoothWheel:true,easing:(t)=>Math.min(1,1.001-Math.pow(2,-10*t))})
+  lenis.on('scroll',()=>{if(raf)cancelAnimationFrame(raf);raf=requestAnimationFrame(mapVideo)})
+  ;(function lenisRaf(t){lenis.raf(t);requestAnimationFrame(lenisRaf)})(0)
+}
+
+// ─── ANCHOR SCROLL ───
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}}))
+</script>
+</body>
+</html>

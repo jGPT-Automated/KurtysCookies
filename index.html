@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -205,9 +206,12 @@ footer{padding:clamp(32px,5vw,56px) clamp(20px,5vw,72px) 28px;border-top:1px sol
 <nav id="nav">
   <a href="index.html" class="nav-logo"><img src="https://kurtyscookies.com/cdn/shop/files/Horizontal_Logo_White_Header_140x.png?v=1735790614&width=600" alt="Kurty's Cookies" height="26"></a>
   <ul class="nav-links">
-    <li><a href="#order">Order</a></li>
+    <li style="font-size:.62rem;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-right:-8px">Variant→</li>
+    <li><a href="index.html" style="color:var(--red)">Cinema</a></li>
+    <li><a href="craft.html">Craft</a></li>
+    <li><a href="minimal.html">Bold</a></li>
+    <li style="width:1px;height:16px;background:var(--border);margin:0 4px"></li>
     <li><a href="vault.html">The Vault</a></li>
-    <li><a href="vault.html#flavors">All Flavors</a></li>
     <li><a href="https://kurtyscookies.com/pages/catering" target="_blank" rel="noopener">Catering</a></li>
   </ul>
   <a href="vault.html" class="btn-red-pill">Vote 🔥</a>
@@ -420,6 +424,13 @@ async function init(){
   document.querySelectorAll('.lineup-card').forEach(el=>sectionObs.observe(el))
 }
 init()
+
+// ===== LENIS SMOOTH SCROLL =====
+if(typeof Lenis!=='undefined'){
+  const lenis=new Lenis({duration:1.35,smoothWheel:true,easing:(t)=>Math.min(1,1.001-Math.pow(2,-10*t))})
+  lenis.on('scroll',()=>{if(raf)cancelAnimationFrame(raf);raf=requestAnimationFrame(mapVideo)})
+  ;(function lenisRaf(t){lenis.raf(t);requestAnimationFrame(lenisRaf)})(0)
+}
 
 // ===== MOBILE MENU =====
 const ham=document.getElementById('ham'),mob=document.getElementById('mobMenu')

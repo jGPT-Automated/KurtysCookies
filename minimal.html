@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kurty's Cookies — Austin, TX</title>
+<meta name="description" content="No shortcuts. No preservatives. No artificial anything. The best damn cookies in Austin, TX.">
+<link rel="icon" href="https://kurtyscookies.com/cdn/shop/files/Small_Logo_Red_32x32.png?v=1735852532">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --bg:#000000;--surface:#0a0a0a;--border:#1a1a1a;
+  --red:#FF2B00;--red-dim:rgba(255,43,0,.1);
+  --text:#FFFFFF;--muted:#666666;--dim:#333333;
+  --ease:cubic-bezier(0.16,1,0.3,1);
+}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+
+/* REVEAL ANIMATIONS */
+.char-up{display:inline-block;overflow:hidden;vertical-align:top}
+.char-up span{display:inline-block;transform:translateY(100%);transition:transform 1s var(--ease) var(--ci,0s)}
+.section-wrap.active .char-up span{transform:translateY(0)}
+.line-in{opacity:0;transform:translateX(-20px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.line-in.d1{transition-delay:.1s}.line-in.d2{transition-delay:.2s}.line-in.d3{transition-delay:.3s}.line-in.d4{transition-delay:.4s}
+.section-wrap.active .line-in{opacity:1;transform:none}
+.rev{opacity:0;transform:translateY(16px);transition:opacity .75s var(--ease),transform .75s var(--ease)}
+.rev.in{opacity:1;transform:none}
+.r1{transition-delay:.08s}.r2{transition-delay:.16s}.r3{transition-delay:.24s}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:56px;padding:0 clamp(16px,5vw,48px);display:flex;align-items:center;justify-content:space-between;transition:background .4s ease,border-color .4s ease;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(0,0,0,.95);border-bottom-color:var(--border)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--text)}
+.nav-links{display:flex;align-items:center;gap:24px;list-style:none}
+.nav-links a{font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.nav-links a.active{color:var(--red)}
+.nav-links .variants-label{font-size:.6rem;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-right:-10px}
+.btn-nav-minimal{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;font-size:.68rem;font-weight:500;letter-spacing:.1em;background:var(--red);color:#fff;transition:opacity .2s}
+.btn-nav-minimal:hover{opacity:.85}
+.ham{display:none;flex-direction:column;gap:4px;padding:8px}
+.ham span{display:block;width:20px;height:1px;background:var(--text)}
+.mob-menu{display:none;position:fixed;top:56px;left:0;right:0;z-index:190;background:#000;border-bottom:1px solid var(--border);flex-direction:column}
+.mob-menu.open{display:flex}
+.mob-menu a{font-size:.85rem;font-weight:500;letter-spacing:.08em;color:var(--muted);padding:16px clamp(16px,5vw,40px);border-bottom:1px solid var(--border);text-transform:uppercase;transition:color .2s}
+.mob-menu a:hover{color:var(--text)}
+
+/* VIDEO LAYER */
+.video-layer{position:fixed;inset:0;z-index:0;overflow:hidden}
+.video-layer video{width:100%;height:100%;object-fit:cover;filter:grayscale(.82) contrast(1.15) brightness(.88)}
+.video-dim{position:absolute;inset:0;background:rgba(0,0,0,.42)}
+
+/* SCROLL TRACK */
+#scroll-track{position:relative;z-index:1}
+.section-wrap{height:100vh}
+.scroll-section{position:sticky;top:0;height:100vh;width:100%;overflow:hidden;pointer-events:auto}
+
+/* SOLID */
+.solid-section{position:relative;z-index:1;background:var(--bg)}
+
+/* ===== SECTION 1: IDENTITY ===== */
+/* Radial behind text (bottom-left) + bottom fade */
+.s1-overlay{position:absolute;inset:0;background:radial-gradient(ellipse 80% 65% at 12% 92%,rgba(0,0,0,.92) 0%,rgba(0,0,0,0) 100%),linear-gradient(180deg,rgba(0,0,0,.4) 0%,rgba(0,0,0,0) 35%,rgba(0,0,0,.97) 100%)}
+.s1-content{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:0 clamp(16px,5vw,56px) clamp(40px,7vh,72px)}
+.brand-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(5rem,18vw,20rem);line-height:.87;letter-spacing:.04em;color:#fff;overflow:hidden;display:block}
+.brand-name .char-up{vertical-align:baseline}
+.brand-sub{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.8rem,5vw,5.5rem);letter-spacing:.1em;color:var(--red);line-height:1;margin-bottom:24px;display:block}
+.s1-tagline{font-size:clamp(.75rem,1.1vw,.88rem);font-weight:300;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:32px}
+.s1-ctas{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.btn-bold{display:inline-flex;align-items:center;gap:10px;padding:13px 32px;font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;background:var(--red);color:#fff;transition:opacity .2s}
+.btn-bold:hover{opacity:.85}
+.btn-bold-ghost{display:inline-flex;align-items:center;gap:10px;padding:13px 28px;font-size:.78rem;font-weight:400;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(255,255,255,.25);color:rgba(255,255,255,.65);transition:border-color .2s,color .2s}
+.btn-bold-ghost:hover{border-color:rgba(255,255,255,.6);color:#fff}
+
+/* ===== SECTION 2: NO SHORTCUTS ===== */
+.s2-overlay{position:absolute;inset:0;background:radial-gradient(ellipse 75% 60% at 10% 90%,rgba(0,0,0,.93) 0%,rgba(0,0,0,0) 100%),linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 28%,rgba(0,0,0,.97) 100%)}
+.s2-content{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:0 clamp(16px,5vw,56px) clamp(40px,7vh,72px)}
+.s2-headline{font-family:'Bebas Neue',sans-serif;font-size:clamp(4.5rem,14vw,16rem);line-height:.88;letter-spacing:.04em;color:#fff;margin-bottom:32px}
+.s2-headline .red{color:var(--red)}
+.fact-line{display:flex;align-items:baseline;gap:14px;margin-bottom:10px}
+.fact-dot{width:4px;height:4px;border-radius:50%;background:var(--red);flex-shrink:0;margin-bottom:2px}
+.fact-text{font-size:clamp(.82rem,1.3vw,1rem);font-weight:300;letter-spacing:.06em;color:rgba(255,255,255,.65)}
+.fact-text strong{color:#fff;font-weight:500}
+
+/* ===== SECTION 3: ORDER ===== */
+.s3-overlay{position:absolute;inset:0;background:radial-gradient(ellipse 80% 65% at 10% 90%,rgba(0,0,0,.92) 0%,rgba(0,0,0,0) 100%),linear-gradient(180deg,rgba(0,0,0,.2) 0%,rgba(0,0,0,0) 25%,rgba(0,0,0,.97) 100%)}
+.s3-content{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:0 clamp(16px,5vw,56px) clamp(40px,7vh,72px)}
+.s3-headline{font-family:'Bebas Neue',sans-serif;font-size:clamp(4.5rem,13vw,15rem);line-height:.88;letter-spacing:.04em;color:#fff;margin-bottom:20px}
+.s3-where{font-size:clamp(.78rem,1.1vw,.9rem);font-weight:300;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:28px}
+.s3-ctas{display:flex;gap:12px;flex-wrap:wrap}
+
+/* ===== SOLID SECTION ===== */
+.vault-teaser-min{padding:clamp(56px,8vw,88px) clamp(16px,5vw,56px);border-bottom:1px solid var(--border)}
+.vtm-inner{max-width:1100px;margin:0 auto}
+.vtm-head{margin-bottom:clamp(32px,4vw,48px);display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.vtm-title-wrap .vtm-label{font-size:.62rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--red);margin-bottom:10px;display:block}
+.vtm-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,6vw,5.5rem);letter-spacing:.04em;line-height:.92;color:#fff}
+.vtm-sub{font-size:.82rem;font-weight:300;color:var(--muted);line-height:1.7;max-width:320px}
+.vtm-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--red);color:var(--red);flex-shrink:0;transition:all .2s}
+.vtm-btn:hover{background:var(--red);color:#fff}
+.vtm-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.vtm-card{background:var(--surface);border:1px solid var(--border);padding:18px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;transition:border-color .2s}
+.vtm-card:hover{border-color:var(--red)}
+.vtm-rank{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.04em;color:var(--dim);line-height:1}
+.vtm-img{width:80px;height:80px;object-fit:contain;filter:grayscale(.5) drop-shadow(0 6px 16px rgba(0,0,0,.6))}
+.vtm-name{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.06em;color:#fff}
+.vtm-votes{font-size:.7rem;font-weight:400;color:var(--muted);letter-spacing:.06em}
+.vtm-coming{font-size:.58rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--red);border:1px solid rgba(255,43,0,.3);padding:2px 8px}
+
+/* Order */
+.order-min{padding:clamp(56px,8vw,88px) clamp(16px,5vw,56px);border-bottom:1px solid var(--border)}
+.om-inner{max-width:1100px;margin:0 auto}
+.om-label{font-size:.62rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--red);margin-bottom:12px;display:block}
+.om-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,6vw,5.5rem);letter-spacing:.04em;line-height:.92;margin-bottom:clamp(28px,4vw,48px)}
+.om-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.om-card{background:var(--bg);padding:clamp(20px,3vw,28px);display:flex;flex-direction:column;gap:10px}
+.om-icon{font-size:1.1rem}
+.om-card-title{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:.06em;color:#fff}
+.om-desc{font-size:.78rem;font-weight:300;color:var(--muted);line-height:1.75;flex:1}
+.om-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.om-list li{font-size:.72rem;font-weight:300;color:var(--dim);display:flex;gap:8px}
+.om-list li::before{content:'→';color:var(--red)}
+.om-cta{font-size:.68rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--red);display:inline-flex;align-items:center;gap:6px;margin-top:6px;transition:gap .2s}
+.om-cta:hover{gap:12px}
+
+/* Footer */
+footer{padding:clamp(28px,4vw,48px) clamp(16px,5vw,56px) 24px;border-top:1px solid var(--border)}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.08em;color:var(--dim)}
+.footer-copy,.footer-heart{font-size:.68rem;font-weight:300;color:var(--dim);letter-spacing:.06em}
+.footer-heart em{font-style:normal;color:var(--red)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .nav-links{display:none}
+  nav .btn-nav-minimal{display:none}
+  .ham{display:flex}
+  .vtm-cards,.om-grid{grid-template-columns:1fr}
+  .om-grid{background:transparent;gap:1px solid var(--border)}
+  .vtm-head{flex-direction:column;align-items:flex-start}
+  .footer-inner{flex-direction:column;text-align:center}
+}
+@media(max-width:640px){
+  .s1-ctas,.s3-ctas{flex-direction:column}
+  .vtm-cards{grid-template-columns:1fr}
+  .om-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- VIDEO -->
+<div class="video-layer">
+  <video id="hero-video" muted playsinline preload="auto" src="https://pub.hyperagent.com/api/published/pbf01M31RKZBZ_1ZFMDR6R18WXPR3H/08552c2d-bc9f-4ecb-a849-55aec51df668.mp4"></video>
+  <div class="video-dim"></div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="nav-logo">KURTY'S</a>
+  <ul class="nav-links">
+    <li><span class="variants-label">Variant →</span></li>
+    <li><a href="index.html">Cinema</a></li>
+    <li><a href="craft.html">Craft</a></li>
+    <li><a href="minimal.html" class="active">Bold</a></li>
+    <li style="width:1px;height:14px;background:var(--border);margin:0 4px"></li>
+    <li><a href="vault.html">The Vault</a></li>
+    <li><a href="https://kurtyscookies.com/pages/catering" target="_blank" rel="noopener">Catering</a></li>
+  </ul>
+  <a href="vault.html" class="btn-nav-minimal">VOTE</a>
+  <button class="ham" id="ham"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="index.html" onclick="closeMob()">← Cinema</a>
+  <a href="craft.html" onclick="closeMob()">← Craft</a>
+  <a href="vault.html" onclick="closeMob()">The Vault</a>
+  <a href="#order" onclick="closeMob()">Order</a>
+</div>
+
+<!-- SCROLL TRACK -->
+<div id="scroll-track">
+
+  <!-- SECTION 1: IDENTITY -->
+  <div class="section-wrap" id="sw1">
+    <div class="scroll-section">
+      <div class="s1-overlay"></div>
+      <div class="s1-content">
+        <span class="brand-name">
+          <span class="char-up" style="--ci:0s"><span>K</span></span><span class="char-up" style="--ci:.04s"><span>U</span></span><span class="char-up" style="--ci:.08s"><span>R</span></span><span class="char-up" style="--ci:.12s"><span>T</span></span><span class="char-up" style="--ci:.16s"><span>Y</span></span><span class="char-up" style="--ci:.2s"><span>'</span></span><span class="char-up" style="--ci:.24s"><span>S</span></span>
+        </span>
+        <span class="brand-sub line-in d1">BEST DAMN COOKIES</span>
+        <div class="s1-tagline line-in d2">Austin, Texas · Est. 2024</div>
+        <div class="s1-ctas line-in d3">
+          <a href="#order" class="btn-bold">Order Now →</a>
+          <a href="vault.html" class="btn-bold-ghost">Vote in The Vault</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: NO SHORTCUTS -->
+  <div class="section-wrap" id="sw2">
+    <div class="scroll-section">
+      <div class="s2-overlay"></div>
+      <div class="s2-content">
+        <div class="s2-headline">
+          <div class="char-up" style="--ci:0s"><span>NO</span></div><br>
+          <div class="char-up" style="--ci:.08s"><span>SHORT<span class="red">CUTS.</span></span></div>
+        </div>
+        <div class="fact-line line-in d1"><div class="fact-dot"></div><div class="fact-text"><strong>Real butter. Real eggs. Organic flour.</strong> Nothing artificial. Ever.</div></div>
+        <div class="fact-line line-in d2"><div class="fact-dot"></div><div class="fact-text"><strong>Dough chilled 1–3 days</strong> before baking. Patience is an ingredient.</div></div>
+        <div class="fact-line line-in d3"><div class="fact-dot"></div><div class="fact-text"><strong>Made in Austin</strong> at a licensed commercial kitchen. 35+ flavors baked to date.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: ORDER CTA -->
+  <div class="section-wrap" id="sw3">
+    <div class="scroll-section">
+      <div class="s3-overlay"></div>
+      <div class="s3-content">
+        <div class="s3-headline">
+          <div class="char-up" style="--ci:0s"><span>ORDER</span></div><br>
+          <div class="char-up" style="--ci:.08s"><span>SATUR<span style="color:var(--red)">DAY.</span></span></div>
+        </div>
+        <div class="s3-where line-in d2">Three Austin locations · Every Saturday morning</div>
+        <div class="s3-ctas line-in d3">
+          <a href="https://kurtyscookies.com" target="_blank" rel="noopener" class="btn-bold">Order Pickup →</a>
+          <a href="vault.html" class="btn-bold-ghost">Vote in The Vault</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /scroll-track -->
+
+<!-- SOLID SECTION -->
+<div class="solid-section">
+
+  <!-- VAULT TEASER -->
+  <div class="vault-teaser-min">
+    <div class="vtm-inner">
+      <div class="vtm-head">
+        <div class="vtm-title-wrap rev">
+          <span class="vtm-label">The Vault · Vote Monthly</span>
+          <div class="vtm-title">VOTE TO<br>BRING IT BACK.</div>
+        </div>
+        <div class="rev r1">
+          <p class="vtm-sub">Every vaulted flavor, voted back by fans. Top 3 return each month.</p>
+        </div>
+        <a href="vault.html" class="vtm-btn rev r2">ENTER THE VAULT →</a>
+      </div>
+      <div class="vtm-cards" id="vt-cards"></div>
+    </div>
+  </div>
+
+  <!-- ORDER -->
+  <div class="order-min" id="order">
+    <div class="om-inner">
+      <span class="om-label rev">Three ways to get your cookies</span>
+      <div class="om-title rev r1">GET YOUR FIX.</div>
+      <div class="om-grid">
+        <div class="om-card rev">
+          <div class="om-icon">🏪</div>
+          <div class="om-card-title">SATURDAY MARKETS</div>
+          <p class="om-desc">Three locations across Austin every Saturday.</p>
+          <ul class="om-list">
+            <li>SFC Republic Square · 9AM–1PM</li>
+            <li>SFC Sunset Valley · 9AM–1PM</li>
+            <li>The Arboretum · 10AM–2PM</li>
+          </ul>
+          <a href="https://kurtyscookies.com" target="_blank" rel="noopener" class="om-cta">Order pickup →</a>
+        </div>
+        <div class="om-card rev r1">
+          <div class="om-icon">🚚</div>
+          <div class="om-card-title">FRIDAY DELIVERY</div>
+          <p class="om-desc">Austin-area delivery every Friday afternoon.</p>
+          <ul class="om-list">
+            <li>Every Friday · 12PM–4PM</li>
+          </ul>
+          <a href="https://kurtyscookies.com" target="_blank" rel="noopener" class="om-cta">Order delivery →</a>
+        </div>
+        <div class="om-card rev r2">
+          <div class="om-icon">🎉</div>
+          <div class="om-card-title">CATERING</div>
+          <p class="om-desc">Events and offices. Any size. Same zero-shortcut quality.</p>
+          <ul class="om-list">
+            <li>Custom quantities</li>
+            <li>Special requests welcome</li>
+          </ul>
+          <a href="https://kurtyscookies.com/pages/catering" target="_blank" rel="noopener" class="om-cta">Request catering →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-name">KURTY'S COOKIES</div>
+      <div class="footer-copy">© 2026 · Austin, TX</div>
+      <div class="footer-heart">Made with <em>♥</em> and too much butter</div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+const SUPA_URL='https://swcuzceplgzdarklzvcp.supabase.co'
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3Y3V6Y2VwbGd6ZGFya2x6dmNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4OTY3NTUsImV4cCI6MjEwNTQ3Mjc1NX0.kc8hq6b-Xr1zmjA4QQQczutJtG7eIWfLUGtB4p-GWKE'
+const sb=supabase.createClient(SUPA_URL,SUPA_KEY)
+
+// ─── VIDEO SCROLL ───
+const vid=document.getElementById('hero-video')
+const track=document.getElementById('scroll-track')
+let rdy=false
+vid.addEventListener('loadeddata',()=>{rdy=true;vid.pause()})
+vid.addEventListener('canplay',()=>{rdy=true;vid.pause()})
+vid.load()
+let raf=null
+function mapVideo(){
+  if(!rdy||!vid.duration)return
+  const p=Math.min(Math.max(window.scrollY/(track.offsetHeight-window.innerHeight),0),1)
+  vid.currentTime=p*vid.duration
+}
+window.addEventListener('scroll',()=>{if(raf)cancelAnimationFrame(raf);raf=requestAnimationFrame(mapVideo)},{passive:true})
+
+// ─── SECTION REVEAL ───
+const secObs=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('active',e.isIntersecting)),{threshold:.25})
+document.querySelectorAll('.section-wrap').forEach(el=>secObs.observe(el))
+const revObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');revObs.unobserve(e.target)}}),{threshold:.1,rootMargin:'0px 0px -40px 0px'})
+document.querySelectorAll('.rev').forEach(el=>revObs.observe(el))
+
+// ─── NAV ───
+const nav=document.getElementById('nav')
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>56),{passive:true})
+const ham=document.getElementById('ham'),mob=document.getElementById('mobMenu')
+let mo=false;ham.addEventListener('click',()=>{mo=!mo;mob.classList.toggle('open',mo)})
+function closeMob(){mo=false;mob.classList.remove('open')}
+
+// ─── DATA ───
+async function init(){
+  const{data}=await sb.from('cookies').select('id,name,image_url,vote_count').eq('status','vault').order('vote_count',{ascending:false}).limit(3)
+  if(!data)return
+  document.getElementById('vt-cards').innerHTML=data.map((c,i)=>`
+    <div class="vtm-card rev" style="transition-delay:${i*.08}s">
+      <div class="vtm-rank">#${i+1}</div>
+      <img class="vtm-img" src="${c.image_url}" alt="${c.name}" loading="lazy">
+      <div class="vtm-name">${c.name.toUpperCase()}</div>
+      <div class="vtm-votes">${c.vote_count} vote${c.vote_count!==1?'s':''}</div>
+      <div class="vtm-coming">COMING BACK</div>
+    </div>`).join('')
+  document.querySelectorAll('.vtm-cards .rev').forEach(el=>revObs.observe(el))
+}
+init()
+
+// ─── LENIS ───
+if(typeof Lenis!=='undefined'){
+  const lenis=new Lenis({duration:1.2,smoothWheel:true,easing:(t)=>Math.min(1,1.001-Math.pow(2,-10*t))})
+  lenis.on('scroll',()=>{if(raf)cancelAnimationFrame(raf);raf=requestAnimationFrame(mapVideo)})
+  ;(function lenisRaf(t){lenis.raf(t);requestAnimationFrame(lenisRaf)})(0)
+}
+
+// ─── ANCHOR ───
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}}))
+</script>
+</body>
+</html>
