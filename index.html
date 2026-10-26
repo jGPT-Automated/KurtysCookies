@@ -374,21 +374,24 @@ const SUPA_URL='https://swcuzceplgzdarklzvcp.supabase.co'
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3Y3V6Y2VwbGd6ZGFya2x6dmNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4OTY3NTUsImV4cCI6MjEwNTQ3Mjc1NX0.kc8hq6b-Xr1zmjA4QQQczutJtG7eIWfLUGtB4p-GWKE'
 const sb=supabase.createClient(SUPA_URL,SUPA_KEY)
 
-// ===== SCROLL VIDEO =====
+// ===== SCROLL VIDEO — blob-load + seek-coalesce + iOS prime =====
 const video=document.getElementById('hero-video')
 const track=document.getElementById('scroll-track')
-let vidReady=false
+let vidReady=false,vidSeeking=false,vidPending=null
+const _vsrc=video.getAttribute('src');video.removeAttribute('src')
+fetch(_vsrc).then(r=>r.blob()).then(b=>{video.src=URL.createObjectURL(b);video.load()}).catch(()=>{video.src=_vsrc;video.load()})
 video.addEventListener('loadeddata',()=>{vidReady=true;video.pause()})
 video.addEventListener('canplay',()=>{vidReady=true;video.pause()})
-video.load()
+video.addEventListener('seeked',()=>{vidSeeking=false;if(vidPending!==null){const t=vidPending;vidPending=null;_seekTo(t)}})
+function _seekTo(t){if(vidSeeking){vidPending=t;return};video.currentTime=t;vidSeeking=true}
+document.addEventListener('touchstart',()=>video.play().then(()=>video.pause()).catch(()=>{}),{once:true})
 let raf=null
 function mapVideo(){
   if(!vidReady||!video.duration)return
-  const scrolled=window.scrollY
   const trackH=track.offsetHeight-window.innerHeight
   if(trackH<=0)return
-  const progress=Math.min(Math.max(scrolled/trackH,0),1)
-  video.currentTime=progress*video.duration
+  const progress=Math.min(Math.max(window.scrollY/trackH,0),1)
+  _seekTo(progress*video.duration)
 }
 window.addEventListener('scroll',()=>{if(raf)cancelAnimationFrame(raf);raf=requestAnimationFrame(mapVideo)},{passive:true})
 

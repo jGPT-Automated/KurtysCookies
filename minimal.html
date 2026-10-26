@@ -57,7 +57,7 @@ nav.scrolled{background:rgba(0,0,0,.95);border-bottom-color:var(--border)}
 /* VIDEO LAYER */
 .video-layer{position:fixed;inset:0;z-index:0;overflow:hidden}
 .video-layer video{width:100%;height:100%;object-fit:cover}
-.video-dim{position:absolute;inset:0;background:rgba(0,0,0,.42)}
+.video-dim{position:absolute;inset:0;background:rgba(0,0,0,.35)}
 
 /* SCROLL TRACK */
 #scroll-track{position:relative;z-index:1}
@@ -322,14 +322,20 @@ const sb=supabase.createClient(SUPA_URL,SUPA_KEY)
 const vid=document.getElementById('hero-video')
 const track=document.getElementById('scroll-track')
 let rdy=false
+// blob-load + seek-coalesce + iOS prime
+let rdy=false,vSeeking=false,vPending=null
+const _src=vid.getAttribute('src');vid.removeAttribute('src')
+fetch(_src).then(r=>r.blob()).then(b=>{vid.src=URL.createObjectURL(b);vid.load()}).catch(()=>{vid.src=_src;vid.load()})
 vid.addEventListener('loadeddata',()=>{rdy=true;vid.pause()})
 vid.addEventListener('canplay',()=>{rdy=true;vid.pause()})
-vid.load()
+vid.addEventListener('seeked',()=>{vSeeking=false;if(vPending!==null){const t=vPending;vPending=null;_sv(t)}})
+function _sv(t){if(vSeeking){vPending=t;return};vid.currentTime=t;vSeeking=true}
+document.addEventListener('touchstart',()=>vid.play().then(()=>vid.pause()).catch(()=>{}),{once:true})
 let raf=null
 function mapVideo(){
   if(!rdy||!vid.duration)return
   const p=Math.min(Math.max(window.scrollY/(track.offsetHeight-window.innerHeight),0),1)
-  vid.currentTime=p*vid.duration
+  _sv(p*vid.duration)
 }
 window.addEventListener('scroll',()=>{if(raf)cancelAnimationFrame(raf);raf=requestAnimationFrame(mapVideo)},{passive:true})
 
