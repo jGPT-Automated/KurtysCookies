@@ -343,6 +343,8 @@ window.addEventListener('scroll',()=>{if(raf)cancelAnimationFrame(raf);raf=reque
 // ─── SECTION REVEAL ───
 const secObs=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('active',e.isIntersecting)),{threshold:.25})
 document.querySelectorAll('.section-wrap').forEach(el=>secObs.observe(el))
+// Immediately activate first section (it's in view on load — don't wait for observer)
+document.querySelector('.section-wrap')?.classList.add('active')
 const revObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');revObs.unobserve(e.target)}}),{threshold:.1,rootMargin:'0px 0px -40px 0px'})
 document.querySelectorAll('.rev').forEach(el=>revObs.observe(el))
 
